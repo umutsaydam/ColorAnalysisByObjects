@@ -152,9 +152,9 @@ if (isset($_POST["submit"])) {
         $fileNames = array();
         for ($i = 0; $i < $total; $i++) {
             $target_file = $target_dir . substr(sha1(mt_rand()), 0, 8) . basename($_FILES["file"]["name"][$i]);
-           // if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $target_file)) {
+            if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $target_file)) {
                 array_push($fileNames, $target_file);
-           // }
+            }
         }
 
         if ($fileNames != null) {

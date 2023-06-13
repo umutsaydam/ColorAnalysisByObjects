@@ -1,12 +1,22 @@
 import sys
 import os
-
+from yolov5.segment import predict
+import subprocess
 target_file_dir = ''
 file_name = ''
 def detect(path_main_file):
   global target_file_dir
-  test = os.system('yolov5/segment/predict.py --weights best.pt --img 416 --conf 0.25 --source "{path_main_file}" --save-txt')
-  target_file_dir = test[len(test)-1][test[len(test)-1].rindex(" ")+1: -7]
+  runPredict = "python yolov5/segment/predict.py --weights best.pt --img 416 --conf 0.25 --source "+ path_main_file +" --save-txt"
+  #test = os.system(runPredict)
+  #test = predict.run(file_name)
+  test = subprocess.Popen(["python", 'yolov5/segment/predict.py', '--weights', 'best.pt', '--img', '416', '--source', path_main_file, '--save-txt'])
+  if len(sys.argv) > 2:
+    print("yes", sys.argv[2])
+  print(test.communicate())
+  #test = exec(open('yolov5/segment/predict.py').read())
+  #predict.main(runPredict)
+  #target_file_dir = test
+  #print(target_file_dir)
 
 import cv2
 import numpy as np
@@ -33,9 +43,7 @@ def read_image_label(path_to_img: str, path_to_txt: str):
 
     return image, obj_cnvrt_obj
 
-import numpy as np
 from sklearn.cluster import KMeans
-
 def cropImg(listCoors : np.ndarray, path_main_file: str, ind : int):
   # original image
   # -1 loads as-is so if it will be 3 or 4 channel as the original
@@ -61,7 +69,7 @@ def cropImg(listCoors : np.ndarray, path_main_file: str, ind : int):
   # Applying thresholding technique
   dst = cv2.merge(rgba, 4)
   # Writing and saving to a new image
-  cv2.imwrite(target_file_dir+"/"+str(ind)+"gfg_white.png", dst)
+  cv2.imwrite("yolov5/runs/predict-seg/exp/gfg_white.png", dst)
   return dst
 # END cropImg
 
@@ -91,41 +99,41 @@ def visualize_colors(cluster, centroids):
 
 import shutil
 # MAIN
-if len(sys.argv) > 1:
-    x = sys.argv[1]
-    data = x
-    path_main_files = data.replace("\\", "")[1: len(data)].split(',')
+lenOfSysArgv = len(sys.argv)
+if lenOfSysArgv > 1:
+   # sys.argv param: ["uploads\/97cad3990da070da0b45424e15bdbddaac41b104\/376a25cagfg_white.png","uploads\/97cad3990da070da0b45424e15bdbddaac41b104\/a4e1efedtest2.jpg"]
+   path_main_files = sys.argv[1][1:-1].replace('\\', '').replace('"', '').split(',')
+   #path_main_files = ["yolov5/test2.jpg"]
+   for path_main_file in path_main_files:
+    file_name = path_main_file.split('/')[2]
+    # file_name = "test2.jpg"
+    detect(path_main_file)
+   
+   path_to_text = "yolov5/runs/predict-seg/exp/labels/test2.txt"
+   res = read_image_label(path_main_files, path_to_text)[1]
 
-    for path_main_file  in path_main_files:
-        file_name = "test2.jpg"
-        detect(path_main_file)
+   for q in range(0, len(res)):
+    cropImg(res[q], path_main_files, q)
 
-    path_to_text = target_file_dir+"/labels/"+file_name[:file_name.index(".")]+".txt"
-    res = read_image_label(path_main_file, path_to_text)[1]
-
-    for q in range(0, len(res)):
-     cropImg(res[q], path_main_file, q)
-
-    resultColors = []
-    for i in range(0, len(res)):
-        # Load image and convert to a list of pixels
-        image = cv2.imread(target_file_dir+"/"+str(i)+'gfg_white.png')
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        reshape = image.reshape((image.shape[0] * image.shape[1], 3))
+   resultColors = []
+   for i in range(0, len(res)):
+    # Load image and convert to a list of pixels
+    path = "yolov5/runs/predict-seg/exp/gfg_white.png"
+    image = cv2.imread(path)
+    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    reshape = image.reshape((image.shape[0] * image.shape[1], 3))
 
     # Find and display most dominant colors
-    cluster = KMeans(n_clusters=4).fit(reshape)
-    visualize = visualize_colors(cluster, cluster.cluster_centers_)
-    resultColors.append(visualize)
-    #visualize = cv2.cvtColor(visualize, cv2.COLOR_RGB2BGR)
+   cluster = KMeans(n_clusters=4).fit(reshape)
+   visualize = visualize_colors(cluster, cluster.cluster_centers_)
+   resultColors.append(visualize)
+   #visualize = cv2.cvtColor(visualize, cv2.COLOR_RGB2BGR)
 
-    
-    for q in resultColors:
-        print(q)
-    
+   ''' 
+   for q in resultColors:
     print(q)
+   '''
+   print(resultColors)
+   shutil.rmtree("yolov5/runs/predict-seg/exp") 
+   #shutil.rmtree(target_file_dir)
 
-    shutil.rmtree(path_main_file) 
-    shutil.rmtree(target_file_dir)
-else:
-    print("failed")

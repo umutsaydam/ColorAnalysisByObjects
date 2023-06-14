@@ -158,7 +158,10 @@ if (isset($_POST["submit"])) {
         }
 
         if ($fileNames != null) {
-            echo shell_exec("python detect.py ". json_encode($fileNames));
+            $result = shell_exec("python detect.py ". json_encode($fileNames));
+            if($result != null){?>
+                <h2><?php echo $result ?></h2>
+            <?php }
             //echo shell_exec("python detect.py " . escapeshellarg(json_encode(array("file_dir"=>$fileNames))));
         }
     }

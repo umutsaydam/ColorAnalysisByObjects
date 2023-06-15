@@ -110,13 +110,13 @@ if lenOfSysArgv > 1:
    
    # path_to_text : uploads/97cad3990da070da0b45424e15bdbddaac41b104/376a25cagfg_white.png
    path_to_img = path_main_files[0]
-   path_to_text = path_main_files[0][:49]+'labels/'+file_name.split('.')[0]+".txt"
+   path_to_text = path_main_files[0][:49]+'results/labels/'+file_name.split('.')[0]+".txt"
    res = read_image_label(path_main_files[0], path_to_text)[1]
    
    for q in range(0, len(res)):
     cropImg(res[q], path_main_files[0], q)
 
-   resultColors = []
+   #resultColors = []
    for i in range(0, len(res)):
     # Load image and convert to a list of pixels
     path= root_dir+"0gfg_white.png"
@@ -128,14 +128,14 @@ if lenOfSysArgv > 1:
     # Find and display most dominant colors
    cluster = KMeans(n_clusters=4).fit(reshape)
    visualize = visualize_colors(cluster, cluster.cluster_centers_)
-   resultColors.append(visualize[0:3])
+   #resultColors.append(visualize[0:3])
    #visualize = cv2.cvtColor(visualize, cv2.COLOR_RGB2BGR)
 
    ''' 
    for q in resultColors:
     print(q)
    '''
-   print(resultColors)
-   shutil.rmtree("yolov5/runs/predict-seg/exp") 
+   print(visualize[0:3])
+   #shutil.rmtree("yolov5/runs/predict-seg/exp") 
    #shutil.rmtree(target_file_dir)
 

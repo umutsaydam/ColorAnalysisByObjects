@@ -1,3 +1,30 @@
+<?php
+
+use function PHPSTORM_META\type;
+
+$result = null;
+if (isset($_POST["submit"])) {
+    if (isset($_POST["selection"]) && isset($_FILES["file"])) {
+        $total = count($_FILES['file']['name']);
+        $newDir = sha1(mt_rand());
+        mkdir("uploads/" . $newDir);
+        $target_dir = "uploads/" . $newDir . "/";
+        $fileNames = array();
+        for ($i = 0; $i < $total; $i++) {
+            $target_file = $target_dir . substr(sha1(mt_rand()), 0, 8) . basename($_FILES["file"]["name"][$i]);
+            if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $target_file)) {
+                array_push($fileNames, $target_file);
+            }
+        }
+        if ($fileNames != null) {
+            $result = shell_exec("python detect.py " . json_encode($fileNames));
+            if ($result == "failed") {
+                echo "HATA";
+            }
+        }
+    }
+}
+?>
 <!DOCTYPE html>
 <html>
 
@@ -99,40 +126,46 @@
                             <input class="btn btn-light col-md-3 btn-radius p-3 mb-4" type="submit" name="submit" value="Yükle" />
                         </div>
 
-                        <div class="row mt-5 result" hidden>
-                            <div class="row">
-                                <h2 class="text-center mb-4 text-light">Kazak kategorisine göre renk analizi sonuçları.</h2>
+                        <?php if ($result != null) {
+                            echo $result;
+                            $symbols = ["array", "(", ")", "[", "]", "'", " "];
+                            $resultsOfAnalysis = explode(',', trim(str_replace($symbols, "", $result)));
+                        ?>
+                            <div class="row mt-5 result">
+                                <div class="row">
+                                    <h2 class="text-center mb-4 text-light">Kazak kategorisine göre renk analizi sonuçları.</h2>
+                                </div>
+                                <div class="col d-flex justify-content-center align-items-center result-bg">
+                                    <div class="skill-main col-md-2" style="margin:45px;">
+                                        <div class="skill-item">
+                                            <h4>1. Renk</h4>
+                                            <div class="progress">
+                                                <progress class="progress-bar col-5" style="height:100%; width:100%; background-color:rgb(<?php echo $resultsOfAnalysis[0] . ', ' . $resultsOfAnalysis[1] . ', ' . $resultsOfAnalysis[2] ?>);" id="file" value="70" max="100"> 70% </progress>
+                                            </div>
+                                            <h6 class="text-center mt-1"><?php echo $resultsOfAnalysis[3]; ?></h6>
+                                        </div>
+                                    </div>
+                                    <div class="skill-main col-md-2" style="margin:45px;">
+                                        <div class="skill-item">
+                                            <h4>2. Renk</h4>
+                                            <div class="progress">
+                                                <div class="progress-bar col-5"></div>
+                                            </div>
+                                            <h6 class="text-center mt-1">%65</h6>
+                                        </div>
+                                    </div>
+                                    <div class="skill-main col-md-2" style="margin:45px;">
+                                        <div class="skill-item">
+                                            <h4>3. Renk</h4>
+                                            <div class="progress">
+                                                <div class="progress-bar col-5"></div>
+                                            </div>
+                                            <h6 class="text-center mt-1">%65</h6>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="col d-flex justify-content-center align-items-center result-bg">
-                                <div class="skill-main col-md-2" style="margin:45px;">
-                                    <div class="skill-item">
-                                        <h4>1. Renk</h4>
-                                        <div class="progress">
-                                            <div class="progress-bar col-5"></div>
-                                        </div>
-                                        <h6 class="text-center mt-1">%65</h6>
-                                    </div>
-                                </div>
-                                <div class="skill-main col-md-2" style="margin:45px;">
-                                    <div class="skill-item">
-                                        <h4>2. Renk</h4>
-                                        <div class="progress">
-                                            <div class="progress-bar col-5"></div>
-                                        </div>
-                                        <h6 class="text-center mt-1">%65</h6>
-                                    </div>
-                                </div>
-                                <div class="skill-main col-md-2" style="margin:45px;">
-                                    <div class="skill-item">
-                                        <h4>3. Renk</h4>
-                                        <div class="progress">
-                                            <div class="progress-bar col-5"></div>
-                                        </div>
-                                        <h6 class="text-center mt-1">%65</h6>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <?php } ?>
                     </div>
                 </form>
             </div>
@@ -142,29 +175,3 @@
 </body>
 
 </html>
-<?php
-if (isset($_POST["submit"])) {
-    if (isset($_POST["selection"]) && isset($_FILES["file"])) {
-        $total = count($_FILES['file']['name']);
-        $newDir = sha1(mt_rand());
-        mkdir("uploads/" . $newDir);
-        $target_dir = "uploads/" . $newDir . "/";
-        $fileNames = array();
-        for ($i = 0; $i < $total; $i++) {
-            $target_file = $target_dir . substr(sha1(mt_rand()), 0, 8) . basename($_FILES["file"]["name"][$i]);
-            if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $target_file)) {
-                array_push($fileNames, $target_file);
-            }
-        }
-
-        if ($fileNames != null) {
-            $result = shell_exec("python detect.py ". json_encode($fileNames));
-            if($result != null){?>
-                <h2><?php echo $result ?></h2>
-            <?php }
-            //echo shell_exec("python detect.py " . escapeshellarg(json_encode(array("file_dir"=>$fileNames))));
-        }
-    }
-}
-
-?>

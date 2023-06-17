@@ -3,7 +3,10 @@
 
 $result = null;
 if (isset($_POST["submit"])) {
-    if (isset($_POST["selection"]) && isset($_FILES["file"])) {
+    $result = "
+
+    [[[array([     153.01,      152.35,      152.21]), '2.90%'], [array([     195.94,      195.69,      195.58]), '4.82%'], [array([     226.71,      226.52,      226.07]), '9.24%']], [[array([     160.99,      159.51,      158.96]), '2.54%'], [array([     207.95,      207.07,      206.64]), '2.73%'], [array([     233.81,      233.68,       233.3]), '8.87%']]]                            ";
+    /*if (isset($_POST["selection"]) && isset($_FILES["file"])) {
         $total = count($_FILES['file']['name']);
         $newDir = sha1(mt_rand());
         mkdir("uploads/" . $newDir);
@@ -21,7 +24,7 @@ if (isset($_POST["submit"])) {
                 echo "HATA";
             }
         }
-    }
+    }*/
 }
 ?>
 <!DOCTYPE html>
@@ -133,45 +136,50 @@ if (isset($_POST["submit"])) {
                             $analyzes = explode("%", $result);
                             array_pop($analyzes);
                             $analyzes = array_reverse($analyzes);
-
-                            $firstAnalysis = doubleval(explode(" ", trim($analyzes[0]))[3]);
-                            $secondAnalysis = doubleval(explode(" ", trim($analyzes[1]))[3]);
-                            $thirdAnalysis = doubleval(explode(" ", trim($analyzes[2]))[3]);
-                            $sum = 0;
-                            for ($i = 0; $i < count($analyzes); $i++) {
-                                $rate = doubleval(explode(" ", trim($analyzes[$i]))[3]);
-                                $sum += $rate;
-                            }
                         ?>
+
+                            <div class="row">
+                                <h2 class="text-center mb-4 text-light">Kazak kategorisine göre renk analizi sonuçları.</h2>
+                            </div>
                             <div class="row mt-5 result">
-                                <div class="row">
-                                    <h2 class="text-center mb-4 text-light">Kazak kategorisine göre renk analizi sonuçları.</h2>
-                                </div>
-                                <div class="col d-flex justify-content-center align-items-center result-bg">
-                                    <?php
-                                    $i = 1;
-                                    foreach ($analyzes as $analysis) {
-                                        $items = explode(" ", trim($analysis));
-                                        $rateOfAnalysis = doubleval($items[3] * 100 / $sum); ?>
+                                <?php
+                                $sum = 0;
+                                for ($i = 0; $i < count($analyzes); $i++) {
+                                    $items = explode(" ", str_replace("  ", " ", trim($analyzes[$i])));
+                                    if ($i % 3 == 0) {
+                                        $sum = 0;
+                                        for ($j = $i; $j <= $i + 2; $j++) {
+                                            $rate = doubleval(explode(" ", str_replace("  ", " ", trim($analyzes[$j])))[3]);
+                                            $sum += $rate;
+                                        }
+                                ?>
+                                        <div class="col d-flex justify-content-center align-items-center result-bg">
+                                        <?php }
+                                    $rateOfAnalysis = $items[3] * 100 / $sum;
+                                        ?>
                                         <div class="skill-main col-md-2" style="margin:45px;">
                                             <div class="skill-item">
-                                                <h4><?php echo $i; ?>. Renk</h4>
+                                                <h4><?php echo $i + 1; ?>. Renk</h4>
                                                 <div class="progress">
                                                     <style>
-                                                        .progress<?php echo $i; ?>::-webkit-progress-value {
+                                                        .progress<?php echo $i + 1; ?>::-webkit-progress-value {
                                                             background: rgb(<?php echo $items[0] . "," . $items[1] . ", " . $items[2]; ?>);
                                                         }
                                                     </style>
-                                                    <progress class="progress-bar col-5 <?php echo "progress" . $i; ?>" style="height:100%; width:100%;" id="myProgress" value="<?php echo $rateOfAnalysis; ?>" max="100"> <?php echo $items[3]; ?> </progress>
+                                                    <progress class="progress-bar col-5 <?php echo "progress" . $i + 1; ?>" style="height:100%; width:100%;" id="myProgress" value="<?php echo intval($rateOfAnalysis); ?>" max="100"> <?php echo $items[3]; ?> </progress>
                                                 </div>
                                                 <h6 class="text-center mt-1"><?php echo "rgb(" . $items[0] . "," . $items[1] . ", " . $items[2] . ")"; ?></h6>
-                                                <h6 class="text-center mt-1"><?php echo substr(strval($rateOfAnalysis), 0, 5) . "%"; ?></h6>
+                                                <h6 class="text-center mt-1"><?php echo (strlen(strval($rateOfAnalysis)) > 5 ? substr($rateOfAnalysis, 0, 5) : $rateOfAnalysis) . "%";
+                                                                                ?></h6>
                                             </div>
                                         </div>
-                                    <?php $i++;
+                                        <?php
+                                        if ($i != 0 && ($i + 1) % 3 == 0) {
+                                        ?>
+                                        </div>
+                                <?php }
                                     }
-                                    ?>
-                                </div>
+                                ?>
                             </div>
                         <?php } ?>
                     </div>

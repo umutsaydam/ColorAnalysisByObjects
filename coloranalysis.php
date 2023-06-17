@@ -1,6 +1,5 @@
 <?php
 
-use function PHPSTORM_META\type;
 
 $result = null;
 if (isset($_POST["submit"])) {
@@ -127,42 +126,51 @@ if (isset($_POST["submit"])) {
                         </div>
 
                         <?php if ($result != null) {
+                            $result = trim($result);
                             echo $result;
-                            $symbols = ["array", "(", ")", "[", "]", "'", " "];
-                            $resultsOfAnalysis = explode(',', trim(str_replace($symbols, "", $result)));
+                            $symbols = ["[", "]", "array", "(", ",", ")", "'"];
+                            $result = trim(str_replace("      ", " ", str_replace($symbols, "", trim($result))));
+                            $analyzes = explode("%", $result);
+                            array_pop($analyzes);
+                            $analyzes = array_reverse($analyzes);
+
+                            $firstAnalysis = doubleval(explode(" ", trim($analyzes[0]))[3]);
+                            $secondAnalysis = doubleval(explode(" ", trim($analyzes[1]))[3]);
+                            $thirdAnalysis = doubleval(explode(" ", trim($analyzes[2]))[3]);
+                            $sum = 0;
+                            for ($i = 0; $i < count($analyzes); $i++) {
+                                $rate = doubleval(explode(" ", trim($analyzes[$i]))[3]);
+                                $sum += $rate;
+                            }
                         ?>
                             <div class="row mt-5 result">
                                 <div class="row">
                                     <h2 class="text-center mb-4 text-light">Kazak kategorisine göre renk analizi sonuçları.</h2>
                                 </div>
                                 <div class="col d-flex justify-content-center align-items-center result-bg">
-                                    <div class="skill-main col-md-2" style="margin:45px;">
-                                        <div class="skill-item">
-                                            <h4>1. Renk</h4>
-                                            <div class="progress">
-                                                <progress class="progress-bar col-5" style="height:100%; width:100%; background-color:rgb(<?php echo $resultsOfAnalysis[0] . ', ' . $resultsOfAnalysis[1] . ', ' . $resultsOfAnalysis[2] ?>);" id="file" value="70" max="100"> 70% </progress>
+                                    <?php
+                                    $i = 1;
+                                    foreach ($analyzes as $analysis) {
+                                        $items = explode(" ", trim($analysis));
+                                        $rateOfAnalysis = doubleval($items[3] * 100 / $sum); ?>
+                                        <div class="skill-main col-md-2" style="margin:45px;">
+                                            <div class="skill-item">
+                                                <h4><?php echo $i; ?>. Renk</h4>
+                                                <div class="progress">
+                                                    <style>
+                                                        .progress<?php echo $i; ?>::-webkit-progress-value {
+                                                            background: rgb(<?php echo $items[0] . "," . $items[1] . ", " . $items[2]; ?>);
+                                                        }
+                                                    </style>
+                                                    <progress class="progress-bar col-5 <?php echo "progress" . $i; ?>" style="height:100%; width:100%;" id="myProgress" value="<?php echo $rateOfAnalysis; ?>" max="100"> <?php echo $items[3]; ?> </progress>
+                                                </div>
+                                                <h6 class="text-center mt-1"><?php echo "rgb(" . $items[0] . "," . $items[1] . ", " . $items[2] . ")"; ?></h6>
+                                                <h6 class="text-center mt-1"><?php echo substr(strval($rateOfAnalysis), 0, 5) . "%"; ?></h6>
                                             </div>
-                                            <h6 class="text-center mt-1"><?php echo $resultsOfAnalysis[3]; ?></h6>
                                         </div>
-                                    </div>
-                                    <div class="skill-main col-md-2" style="margin:45px;">
-                                        <div class="skill-item">
-                                            <h4>2. Renk</h4>
-                                            <div class="progress">
-                                                <div class="progress-bar col-5"></div>
-                                            </div>
-                                            <h6 class="text-center mt-1">%65</h6>
-                                        </div>
-                                    </div>
-                                    <div class="skill-main col-md-2" style="margin:45px;">
-                                        <div class="skill-item">
-                                            <h4>3. Renk</h4>
-                                            <div class="progress">
-                                                <div class="progress-bar col-5"></div>
-                                            </div>
-                                            <h6 class="text-center mt-1">%65</h6>
-                                        </div>
-                                    </div>
+                                    <?php $i++;
+                                    }
+                                    ?>
                                 </div>
                             </div>
                         <?php } ?>

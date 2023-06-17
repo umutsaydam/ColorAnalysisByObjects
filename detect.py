@@ -1,5 +1,6 @@
 import sys
 import os
+import json
 from yolov5.segment import predict 
 
 root_dir= ''
@@ -116,26 +117,26 @@ if lenOfSysArgv > 1:
    for q in range(0, len(res)):
     cropImg(res[q], path_main_files[0], q)
 
-   #resultColors = []
+   resultColors = []
    for i in range(0, len(res)):
     # Load image and convert to a list of pixels
-    path= root_dir+"0gfg_white.png"
+    path= root_dir+str(i)+"gfg_white.png"
     #path = "yolov5/runs/predict-seg/exp/gfg_white.png"
     image = cv2.imread(path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     reshape = image.reshape((image.shape[0] * image.shape[1], 3))
 
     # Find and display most dominant colors
-   cluster = KMeans(n_clusters=4).fit(reshape)
-   visualize = visualize_colors(cluster, cluster.cluster_centers_)
-   #resultColors.append(visualize[0:3])
-   #visualize = cv2.cvtColor(visualize, cv2.COLOR_RGB2BGR)
+    cluster = KMeans(n_clusters=4).fit(reshape)
+    visualize = visualize_colors(cluster, cluster.cluster_centers_)
+    resultColors.append(visualize[0:3])
+    #visualize = cv2.cvtColor(visualize, cv2.COLOR_RGB2BGR)
 
    ''' 
    for q in resultColors:
     print(q)
    '''
-   print(visualize[0:3])
+   print(resultColors)
    #shutil.rmtree("yolov5/runs/predict-seg/exp") 
    #shutil.rmtree(target_file_dir)
 

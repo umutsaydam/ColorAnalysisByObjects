@@ -3,28 +3,36 @@
 
 $result = null;
 if (isset($_POST["submit"])) {
-    $result = "
-
-    [[[array([     153.01,      152.35,      152.21]), '2.90%'], [array([     195.94,      195.69,      195.58]), '4.82%'], [array([     226.71,      226.52,      226.07]), '9.24%']], [[array([     160.99,      159.51,      158.96]), '2.54%'], [array([     207.95,      207.07,      206.64]), '2.73%'], [array([     233.81,      233.68,       233.3]), '8.87%']]]                            ";
-    /*if (isset($_POST["selection"]) && isset($_FILES["file"])) {
-        $total = count($_FILES['file']['name']);
-        $newDir = sha1(mt_rand());
-        mkdir("uploads/" . $newDir);
-        $target_dir = "uploads/" . $newDir . "/";
-        $fileNames = array();
-        for ($i = 0; $i < $total; $i++) {
-            $target_file = $target_dir . substr(sha1(mt_rand()), 0, 8) . basename($_FILES["file"]["name"][$i]);
-            if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $target_file)) {
-                array_push($fileNames, $target_file);
-            }
-        }
-        if ($fileNames != null) {
-            $result = shell_exec("python detect.py " . json_encode($fileNames));
-            if ($result == "failed") {
-                echo "HATA";
-            }
-        }
-    }*/
+    if ($_POST["selection"] != "Bir kategori seçiniz." && $_FILES["file"]["tmp_name"][0] != null) {
+        if (count($_FILES["file"]["tmp_name"]) <= 3) {
+            $result = "[[[array([ 151.37, 150.67, 150.54]), '2.74%'], [array([ 193.46, 193.2, 193.09]), '4.54%'], [array([ 225.97, 225.79, 225.35]), '9.68%']], [[array([ 161.81, 160.34, 159.8]), '2.61%'], [array([ 210.45, 209.67, 209.23]), '2.89%'], [array([ 234.44, 234.31, 233.93]), '8.63%']]]";
+            /*$total = count($_FILES['file']['name']);
+            $newDir = sha1(mt_rand());
+            mkdir("uploads/" . $newDir);
+            $target_dir = "uploads/" . $newDir . "/";
+            $fileNames = array();
+            for ($i = 0; $i < $total; $i++) {
+                $target_file = $target_dir . substr(sha1(mt_rand()), 0, 8) . basename($_FILES["file"]["name"][$i]);
+                if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $target_file)) {
+                    array_push($fileNames, $target_file);
+                }
+            } 
+            if ($fileNames != null) {
+                $result = shell_exec("python detect.py " . json_encode($fileNames));
+                if ($result == "failed") {
+                    echo "HATA";
+                }
+            }*/
+        } else { ?>
+            <div class="alert alert-dark" role="alert">
+                Resim sayısı en fazla 3 adet olmalı.
+            </div>
+        <?php }
+    } else { ?>
+        <div class="alert alert-dark" role="alert">
+            Lütfen bir kategori ve en az bir resim seçiniz.
+        </div>
+<?php }
 }
 ?>
 <!DOCTYPE html>
@@ -125,7 +133,7 @@ if (isset($_POST["submit"])) {
                             <input class="form-control" type="file" accept="image/*" name="file[]" multiple="multiple" style="height:100%; background-color: transparent !important; padding-bottom: 15%;" multiple />
                         </div>
                         <div class="row justify-content-center align-items-center mt-5">
-                            <input class="btn btn-light col-md-3 btn-radius p-3 mb-4" type="submit" name="submit" value="Yükle" />
+                            <input class="btn btn-light col-md-3 btn-radius p-3 mb-4" onclick="disabledBtn()" id="uploadBtn" type="submit" name="submit" value="Yükle" />
                         </div>
 
                         <?php if ($result != null) {

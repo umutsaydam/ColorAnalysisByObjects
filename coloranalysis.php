@@ -1,12 +1,19 @@
 <?php
-
+include_once "class/color_of_objects.php";
+include_once "class/sub_classes.php";
+$colorOfObject = new color_of_objects();
 
 $result = null;
+$mainClass = null;
+$subClass = null;
 if (isset($_POST["submit"])) {
     if ($_POST["selection"] != "Bir kategori seçiniz." && $_FILES["file"]["tmp_name"][0] != null) {
         if (count($_FILES["file"]["tmp_name"]) <= 3) {
+            $mainAndSubClass = explode(" ", $_POST["selection"]);
+            $mainClass = intval($mainAndSubClass[0]);
+            $subClass = doubleval($mainAndSubClass[1]);
             $result = "
-
+            
             [[[array([     151.85,      151.16,      151.02]), '2.75%'], [array([     193.76,      193.49,      193.38]), '4.53%'], [array([     225.97,      225.79,      225.35]), '9.68%']], [[array([     160.99,      159.51,      158.96]), '2.54%'], [array([     207.95,      207.07,      206.64]), '2.73%'], [array([     233.81,      233.68,       233.3]), '8.87%']], 'test', ['17', '17']]
                 ";
             /*$total = count($_FILES['file']['name']);
@@ -138,12 +145,18 @@ if (isset($_POST["submit"])) {
                     <div class="col">
                         <div class="row justify-content-center align-items-center mt-2 mb-5">
                             <div class="col-md-8">
+                                <?php
+                                    $subClasses = new SubClasses();
+                                    $subClassesArr = $subClasses->getSubAllClasses();
+                                ?>
                                 <h2 class="text-center mb-4 text-light">Tespit edilecek nesneyi seçiniz.</h2>
                                 <select class="form-select" name="selection" aria-label="Default select example">
                                     <option selected>Bir kategori seçiniz.</option>
-                                    <option value="Araba">Araba</option>
-                                    <option value="Kazak">Kazak</option>
-                                    <option value="Ayakkabı">Ayakkabı</option>
+                                    <?php
+                                        foreach ($subClassesArr as $class) {?>
+                                            <option value="<?php echo $class["main_class_id"]." ".$class["sub_class_id"]; ?>"><?php echo $class["sub_class_name"]; ?></option>
+                                        <?php }
+                                    ?>
                                 </select>
                             </div>
                         </div>
@@ -173,16 +186,25 @@ if (isset($_POST["submit"])) {
                             <div class="row mt-5 result">
                                 <?php
                                 $sum = 0;
+                                $className = null;
                                 for ($i = 0; $i < count($analyzes); $i++) {
                                     $items = explode(" ", str_replace("  ", " ", trim($analyzes[$i])));
                                     if ($i % 3 == 0) {
+                                        if ($i == 0) {
+                                            $colorOfObject->setColorRgb(($items[0] . "," . $items[1] . "," . $items[2]));
+                                            $colorOfObject->setSubClass($subClass);
+                                            $subClasses->setSubClassID($subClass);
+                                            $classInfo = $subClasses->getSubClass();
+                                            $className = $classInfo == null ? "null" : $classInfo["sub_class_name"];
+                                            $colorOfObject->createColorValue();
+                                        }
                                         $sum = 0;
                                         for ($j = $i; $j <= $i + 2; $j++) {
                                             $rate = doubleval(explode(" ", str_replace("  ", " ", trim($analyzes[$j])))[3]);
                                             $sum += $rate;
                                         }
                                 ?> <div class="row mt-3">
-                                            <h4 class="text-center mb-4 text-light"><?php echo $classes[$i / 3]; ?> kategorisine göre renk analizi sonuçları.</h4>
+                                            <h4 class="text-center mb-4 text-light"><?php echo $className; ?> kategorisine göre renk analizi sonuçları.</h4>
                                         </div>
                                         <div class="col d-flex justify-content-center align-items-center result-bg">
                                         <?php }
@@ -194,7 +216,7 @@ if (isset($_POST["submit"])) {
                                                 <div class="progress">
                                                     <style>
                                                         .progress<?php echo $i + 1; ?>::-webkit-progress-value {
-                                                            background: rgb(<?php echo $items[0] . "," . $items[1] . ", " . $items[2]; ?>);
+                                                            background: rgb(<?php echo $items[0] . ", " . $items[1] . ", " . $items[2]; ?>);
                                                         }
                                                     </style>
                                                     <progress class="progress-bar col-5 <?php echo "progress" . $i + 1; ?>" style="height:100%; width:100%;" id="myProgress" value="<?php echo intval($rateOfAnalysis); ?>" max="100"> <?php echo $items[3]; ?> </progress>

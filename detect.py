@@ -6,6 +6,7 @@ from yolov5.segment import predict
 root_dir= ''
 target_file_dir = ''
 file_name = ''
+cls_obj = []
 def detect(path_main_file):
   global target_file_dir
   runPredict = "python yolov5/segment/predict.py --weights best.pt --img 416 --conf 0.25 --source "+ path_main_file +" --save-txt"
@@ -22,8 +23,8 @@ def read_image_label(path_to_img: str, path_to_txt: str):
     image = cv2.imread(path_to_img)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     img_h, img_w = image.shape[:2]
-
-    cls_obj = []
+    
+    global cls_obj
     obj_cnvrt_obj = []
     with open(path_to_txt, "r") as k:
       for x in k.readlines():
@@ -32,6 +33,8 @@ def read_image_label(path_to_img: str, path_to_txt: str):
         obj_coords = info[1:]
         obj_cnvrt_obj.append((np.array([[eval(x), eval(y)] for x, y in zip(obj_coords[0::2], obj_coords[1::2])])).astype(np.float))
         #datas.append(x[2:-2])  
+        with open("path.txt", "a") as f:
+          f.write(cls_obj[0]+" ")
 
     for x in range(0,len(obj_cnvrt_obj)):
       obj_cnvrt_obj[x][:,0] = obj_cnvrt_obj[x][:,0]*img_w
@@ -113,7 +116,6 @@ if lenOfSysArgv > 1:
    path_to_img = path_main_files[0]
    path_to_text = path_main_files[0][:49]+'results/labels/'+file_name.split('.')[0]+".txt"
    res = read_image_label(path_main_files[0], path_to_text)[1]
-   
    for q in range(0, len(res)):
     cropImg(res[q], path_main_files[0], q)
 
@@ -125,17 +127,15 @@ if lenOfSysArgv > 1:
     image = cv2.imread(path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     reshape = image.reshape((image.shape[0] * image.shape[1], 3))
-
     # Find and display most dominant colors
     cluster = KMeans(n_clusters=4).fit(reshape)
     visualize = visualize_colors(cluster, cluster.cluster_centers_)
+
     resultColors.append(visualize[0:3])
     #visualize = cv2.cvtColor(visualize, cv2.COLOR_RGB2BGR)
 
-   ''' 
-   for q in resultColors:
-    print(q)
-   '''
+   resultColors.append("test")
+   resultColors.append(cls_obj)
    print(resultColors)
    #shutil.rmtree("yolov5/runs/predict-seg/exp") 
    #shutil.rmtree(target_file_dir)

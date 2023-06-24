@@ -5,7 +5,10 @@ $result = null;
 if (isset($_POST["submit"])) {
     if ($_POST["selection"] != "Bir kategori seçiniz." && $_FILES["file"]["tmp_name"][0] != null) {
         if (count($_FILES["file"]["tmp_name"]) <= 3) {
-            $result = "[[[array([ 151.37, 150.67, 150.54]), '2.74%'], [array([ 193.46, 193.2, 193.09]), '4.54%'], [array([ 225.97, 225.79, 225.35]), '9.68%']], [[array([ 161.81, 160.34, 159.8]), '2.61%'], [array([ 210.45, 209.67, 209.23]), '2.89%'], [array([ 234.44, 234.31, 233.93]), '8.63%']]]";
+            $result = "
+
+            [[[array([     151.85,      151.16,      151.02]), '2.75%'], [array([     193.76,      193.49,      193.38]), '4.53%'], [array([     225.97,      225.79,      225.35]), '9.68%']], [[array([     160.99,      159.51,      158.96]), '2.54%'], [array([     207.95,      207.07,      206.64]), '2.73%'], [array([     233.81,      233.68,       233.3]), '8.87%']], 'test', ['17', '17']]
+                ";
             /*$total = count($_FILES['file']['name']);
             $newDir = sha1(mt_rand());
             mkdir("uploads/" . $newDir);
@@ -16,7 +19,7 @@ if (isset($_POST["submit"])) {
                 if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $target_file)) {
                     array_push($fileNames, $target_file);
                 }
-            } 
+            }
             if ($fileNames != null) {
                 $result = shell_exec("python detect.py " . json_encode($fileNames));
                 if ($result == "failed") {
@@ -108,9 +111,26 @@ if (isset($_POST["submit"])) {
         background-color: rgba(222, 226, 230, 0.22);
         border-radius: 5px;
     }
+
+    .custom-spinner {
+        padding: 15%;
+        background-color: rgb(157 157 157 / 80%);
+        border-radius: 10px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        display: none !important;
+    }
 </style>
 
 <body>
+    <div class="container custom-spinner d-flex justify-content-center align-items-center" id="spinner">
+        <div class="spinner-border text-primary " style="width: 7rem; height: 7rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
     <div class="jumbotron vertical-center">
         <div class="container">
             <div class="row">
@@ -139,16 +159,17 @@ if (isset($_POST["submit"])) {
                         <?php if ($result != null) {
                             $result = trim($result);
                             echo $result;
+                            $result = explode("/", $result)[0];
                             $symbols = ["[", "]", "array", "(", ",", ")", "'"];
                             $result = trim(str_replace("      ", " ", str_replace($symbols, "", trim($result))));
-                            $analyzes = explode("%", $result);
+                            // 0-> colors, 1-> classes
+                            $colorsAndClasses = explode("test", $result);
+                            $classes = explode(" ", trim($colorsAndClasses[1]));
+                            $analyzes = explode("%", $colorsAndClasses[0]);
                             array_pop($analyzes);
                             $analyzes = array_reverse($analyzes);
-                        ?>
 
-                            <div class="row">
-                                <h2 class="text-center mb-4 text-light">Kazak kategorisine göre renk analizi sonuçları.</h2>
-                            </div>
+                        ?>
                             <div class="row mt-5 result">
                                 <?php
                                 $sum = 0;
@@ -160,7 +181,9 @@ if (isset($_POST["submit"])) {
                                             $rate = doubleval(explode(" ", str_replace("  ", " ", trim($analyzes[$j])))[3]);
                                             $sum += $rate;
                                         }
-                                ?>
+                                ?> <div class="row mt-3">
+                                            <h4 class="text-center mb-4 text-light"><?php echo $classes[$i / 3]; ?> kategorisine göre renk analizi sonuçları.</h4>
+                                        </div>
                                         <div class="col d-flex justify-content-center align-items-center result-bg">
                                         <?php }
                                     $rateOfAnalysis = $items[3] * 100 / $sum;
@@ -196,6 +219,7 @@ if (isset($_POST["submit"])) {
         </div>
     </div>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/events.js"></script>
 </body>
 
 </html>

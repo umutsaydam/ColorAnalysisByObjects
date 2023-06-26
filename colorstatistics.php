@@ -9,7 +9,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.5.0/Chart.min.js"></script>
 </head>
 <style>
     html {
@@ -46,38 +45,91 @@
         padding: 18px;
         border-radius: 15px;
     }
+
+    #container {
+        width: 100%;
+        max-width: 900px;
+        background-color: rgba(222, 226, 230, 0.22);
+        border-radius: 5px;
+        padding: 18px;
+        border-radius: 15px;
+    }
+
+    #container {
+        margin-top: 50px;
+    }
 </style>
 
 <body>
-
-    <canvas id="myChart" class="statistics"></canvas>
-
     <script src="js/bootstrap.min.js"></script>
-    <script>
-        var xValues = ["Kıyafet", "Telefon", "Araba", "Çanta"];
-        var yValues = [75, 49, 44, 54];
-        var barColors = ["#444444", "#7d2f9b", "#7a18a0", "#718ba5"];
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/modules/networkgraph.js"></script>
 
-        new Chart("myChart", {
-            type: "bar",
-            data: {
-                labels: xValues,
-                datasets: [{
-                    backgroundColor: barColors,
-                    data: yValues
-                }]
+    <div id="container"></div>
+    <script>
+        Highcharts.chart('container', {
+
+            chart: {
+                type: 'networkgraph',
+                marginTop: 80
             },
-            options: {
-                legend: {
-                    display: false
-                },
-                title: {
-                    display: true,
-                    text: "Kategorilere göre renk istatistikleri"
+
+            title: {
+                text: 'Renk Analizi'
+            },
+
+
+            plotOptions: {
+                networkgraph: {
+                    keys: ['from', 'to'],
+                    layoutAlgorithm: {
+                        enableSimulation: true,
+                        integration: 'verlet',
+                        linkLength: 100
+                    }
                 }
-            }
+            },
+
+            series: [{
+                marker: {
+                    radius: 13,
+                },
+                dataLabels: {
+                    enabled: true,
+                    linkFormat: '',
+                    allowOverlap: true,
+                    style: {
+                        textOutline: false
+                    }
+                },
+                data: [
+                    <?php
+                    echo "['Pantolon', 'Giyim']";
+                    ?>
+                    /*
+                    ['Pantolon', 'Giyim'],
+                    ['Canta', 'Giyim'],
+                    ['Gomlek', 'Giyim'],
+                    ['Ayakkabi', 'Giyim']
+                    */
+                ],
+                nodes: [{
+                    id: 'Giyim',
+                    marker: {
+                        radius: 30,
+                        width: '250',
+                        height: '250'
+                    },
+                    color: 'rgb(50,120,222)',
+                    marker: {
+                        width: '150',
+                        height: '150'
+                    }
+                }, ]
+            }]
         });
     </script>
+
 </body>
 
 </html>

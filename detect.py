@@ -7,9 +7,9 @@ root_dir= ''
 target_file_dir = ''
 file_name = ''
 cls_obj = []
-def detect(path_main_file):
+def detect(path_main_file, weightOfName):
   global target_file_dir
-  runPredict = "python yolov5/segment/predict.py --weights best.pt --img 416 --conf 0.25 --source "+ path_main_file +" --save-txt"
+  runPredict = "python yolov5/segment/predict.py --weights "+weightOfName+" --img 416 --conf 0.25 --source "+ path_main_file +" --save-txt"
   result = os.system(runPredict)
   if result == 0:
     return True
@@ -101,13 +101,19 @@ import shutil
 lenOfSysArgv = len(sys.argv)
 if lenOfSysArgv > 1:
    # sys.argv param: ["uploads\/97cad3990da070da0b45424e15bdbddaac41b104\/376a25cagfg_white.png","uploads\/97cad3990da070da0b45424e15bdbddaac41b104\/a4e1efedtest2.jpg"]
-   path_main_files = sys.argv[1][1:-1].replace('\\', '').replace('"', '').split(',')
+   
+   # [uploads\/e63ef34244786455f883b4a6e6e211d5720aa58e\/4e409334qwerty.jpg]*Ceket
+   rootOfSource = sys.argv[1].split("*")
+   #weightOfName = rootOfSource[1]+".pt"
+   weightOfName = "best.pt"
+   path_main_files = rootOfSource[0][1:-1].replace('\\', '').replace('"', '').split(',')
+   
    root_dir = path_main_files[0][:49]
    #path_main_files = ["yolov5/test2.jpg"]
    for path_main_file in path_main_files:
     file_name = path_main_file.split('/')[2]
     # file_name = "test2.jpg"
-    status = detect(path_main_file) 
+    status = detect(path_main_file, weightOfName) 
     if status == False:
       print("failed")
       sys.exit()
@@ -134,9 +140,10 @@ if lenOfSysArgv > 1:
     resultColors.append(visualize[0:3])
     #visualize = cv2.cvtColor(visualize, cv2.COLOR_RGB2BGR)
 
-   resultColors.append("test")
+   resultColors.append("*")
    resultColors.append(cls_obj)
    print(resultColors)
    #shutil.rmtree("yolov5/runs/predict-seg/exp") 
    #shutil.rmtree(target_file_dir)
+   
 

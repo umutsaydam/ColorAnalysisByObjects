@@ -5,34 +5,33 @@ $colorOfObject = new color_of_objects();
 
 $result = null;
 $mainClass = null;
-$subClass = null;
+$subClassID = null;
+$subClassName = null;
 if (isset($_POST["submit"])) {
     if ($_POST["selection"] != "Bir kategori seçiniz." && $_FILES["file"]["tmp_name"][0] != null) {
         if (count($_FILES["file"]["tmp_name"]) <= 3) {
-            $mainAndSubClass = explode(" ", $_POST["selection"]);
-            $mainClass = intval($mainAndSubClass[0]);
-            $subClass = doubleval($mainAndSubClass[1]);
-            $result = "
-            
-            [[[array([     151.85,      151.16,      151.02]), '2.75%'], [array([     193.76,      193.49,      193.38]), '4.53%'], [array([     225.97,      225.79,      225.35]), '9.68%']], [[array([     160.99,      159.51,      158.96]), '2.54%'], [array([     207.95,      207.07,      206.64]), '2.73%'], [array([     233.81,      233.68,       233.3]), '8.87%']], 'test', ['17', '17']]
-                ";
-            /*$total = count($_FILES['file']['name']);
+            $classFullInfo = explode(" ", $_POST["selection"]);
+            $mainClass = intval($classFullInfo[0]);
+            $subClassID = doubleval($classFullInfo[1]);
+            $subClassName = $classFullInfo[2];
+            $total = count($_FILES['file']['name']);
             $newDir = sha1(mt_rand());
             mkdir("uploads/" . $newDir);
             $target_dir = "uploads/" . $newDir . "/";
             $fileNames = array();
             for ($i = 0; $i < $total; $i++) {
+                $_FILES["file"]["name"][$i] = str_replace(" ", "", $_FILES["file"]["name"][$i]);
                 $target_file = $target_dir . substr(sha1(mt_rand()), 0, 8) . basename($_FILES["file"]["name"][$i]);
                 if (move_uploaded_file($_FILES["file"]["tmp_name"][$i], $target_file)) {
                     array_push($fileNames, $target_file);
                 }
             }
             if ($fileNames != null) {
-                $result = shell_exec("python detect.py " . json_encode($fileNames));
+                $result = shell_exec("python detect.py " . json_encode($fileNames) . "*" . $subClassID);
                 if ($result == "failed") {
                     echo "HATA";
                 }
-            }*/
+            }
         } else { ?>
             <div class="alert alert-dark" role="alert">
                 Resim sayısı en fazla 3 adet olmalı.
@@ -146,16 +145,16 @@ if (isset($_POST["submit"])) {
                         <div class="row justify-content-center align-items-center mt-2 mb-5">
                             <div class="col-md-8">
                                 <?php
-                                    $subClasses = new SubClasses();
-                                    $subClassesArr = $subClasses->getSubAllClasses();
+                                $subClass = new SubClasses();
+                                $allSubClasses = $subClass->getSubAllClasses();
                                 ?>
                                 <h2 class="text-center mb-4 text-light">Tespit edilecek nesneyi seçiniz.</h2>
                                 <select class="form-select" name="selection" aria-label="Default select example">
                                     <option selected>Bir kategori seçiniz.</option>
                                     <?php
-                                        foreach ($subClassesArr as $class) {?>
-                                            <option value="<?php echo $class["main_class_id"]." ".$class["sub_class_id"]; ?>"><?php echo $class["sub_class_name"]; ?></option>
-                                        <?php }
+                                    foreach ($allSubClasses as $class) { ?>
+                                        <option value="<?php echo $class["main_class_id"] . " " . $class["sub_class_id"] . " " . $class["sub_class_name"]; ?>"><?php echo $class["sub_class_name"]; ?></option>
+                                    <?php }
                                     ?>
                                 </select>
                             </div>
@@ -176,13 +175,15 @@ if (isset($_POST["submit"])) {
                             $symbols = ["[", "]", "array", "(", ",", ")", "'"];
                             $result = trim(str_replace("      ", " ", str_replace($symbols, "", trim($result))));
                             // 0-> colors, 1-> classes
-                            $colorsAndClasses = explode("test", $result);
+                            $colorsAndClasses = explode("*", $result);
                             $classes = explode(" ", trim($colorsAndClasses[1]));
                             $analyzes = explode("%", $colorsAndClasses[0]);
                             array_pop($analyzes);
                             $analyzes = array_reverse($analyzes);
 
-                        ?>
+                        ?> <div class="row">
+                                <h4 class="text-center mb-4 text-light"><?php echo $subClassName; ?> kategorisine göre renk analizi sonuçları.</h4>
+                            </div>
                             <div class="row mt-5 result">
                                 <?php
                                 $sum = 0;
@@ -190,22 +191,18 @@ if (isset($_POST["submit"])) {
                                 for ($i = 0; $i < count($analyzes); $i++) {
                                     $items = explode(" ", str_replace("  ", " ", trim($analyzes[$i])));
                                     if ($i % 3 == 0) {
-                                        if ($i == 0) {
-                                            $colorOfObject->setColorRgb(($items[0] . "," . $items[1] . "," . $items[2]));
-                                            $colorOfObject->setSubClass($subClass);
-                                            $subClasses->setSubClassID($subClass);
-                                            $classInfo = $subClasses->getSubClass();
-                                            $className = $classInfo == null ? "null" : $classInfo["sub_class_name"];
-                                            $colorOfObject->createColorValue();
-                                        }
+                                        $colorOfObject->setColorRgb(($items[0] . "," . $items[1] . "," . $items[2]));
+                                        $colorOfObject->setSubClass($subClassID);
+                                        $subClass->setsubClassID($subClassID);
+                                        $classInfo = $subClass->getsubClassID();
+                                        $colorOfObject->createColorValue();
+
                                         $sum = 0;
                                         for ($j = $i; $j <= $i + 2; $j++) {
                                             $rate = doubleval(explode(" ", str_replace("  ", " ", trim($analyzes[$j])))[3]);
                                             $sum += $rate;
                                         }
-                                ?> <div class="row mt-3">
-                                            <h4 class="text-center mb-4 text-light"><?php echo $className; ?> kategorisine göre renk analizi sonuçları.</h4>
-                                        </div>
+                                ?>
                                         <div class="col d-flex justify-content-center align-items-center result-bg">
                                         <?php }
                                     $rateOfAnalysis = $items[3] * 100 / $sum;

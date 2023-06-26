@@ -1,6 +1,7 @@
 <?php
 include_once "class/classes.php";
 include_once "class/sub_classes.php";
+include_once "class/color_of_objects.php";
 ?>
 <!DOCTYPE html>
 <html>
@@ -69,8 +70,8 @@ include_once "class/sub_classes.php";
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/networkgraph.js"></script>
     <?php
-    $subClasses = new SubClasses();
-    $subClassesWithParentClasses = $subClasses->getSubClassesWithParentClass();
+    $colorOfObjects = new color_of_objects();
+    $subClassesWithParentClasses = $colorOfObjects->getColorsWithParents();
     $nodes = "";
     $datas = "";
     if ($subClassesWithParentClasses != null) {
@@ -78,9 +79,9 @@ include_once "class/sub_classes.php";
             $nodes .= "{
                     id: '" . $classItem["class_name"] . "',
                     marker: {
-                        radius: 30,
-                        width: '450px',
-                        height: '450px'
+                        radius: 50,
+                        width: '150',
+                        height: '150'
                     },
                     color: 'rgb(50,120,222)',
                 },";

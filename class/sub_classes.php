@@ -78,12 +78,12 @@ class SubClasses{
         $stmt->execute();
         $dataRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $result = array();
-
+        /*
         foreach ($dataRows as $dataRow) {
             $result[] = array("class_id"=>$dataRow["class_id"], "class_name"=>$dataRow["class_name"], "sub_class_id"=>$dataRow["sub_class_id"], "sub_class_name"=>$dataRow["sub_class_name"]);
-        }
-        if ($result != null) {
-            return $result;
+        }*/
+        if ($dataRows != null) {
+            return $dataRows;
         }
         return null;
     }

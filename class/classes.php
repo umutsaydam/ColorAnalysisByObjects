@@ -1,6 +1,6 @@
 <?php
 include_once "config/database.php";
-class color_of_objects{
+class Classes{
     private $conn;
     private $db_table = "classes";
     private $class_id;
@@ -25,5 +25,23 @@ class color_of_objects{
 
     public function setClass_name($class_name){
         $this->class_name = $class_name;
+    }
+
+    function getAllClasses(){
+        $sqlQuery = "SELECT * FROM ". $this->db_table.";";
+        
+        $stmt = $this->conn->prepare($sqlQuery);
+        $stmt->execute();
+        $dataRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = array();
+
+        foreach ($dataRows as $dataRow) {
+            $result[] = array("class_id"=>$dataRow["class_id"], "class_name"=>$dataRow["class_name"]);
+        }
+        
+        if ($result != null) {
+            return $result;
+        }
+        return null;
     }
 }

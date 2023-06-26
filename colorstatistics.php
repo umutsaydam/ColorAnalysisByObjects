@@ -1,3 +1,7 @@
+<?php
+include_once "class/classes.php";
+include_once "class/sub_classes.php";
+?>
 <!DOCTYPE html>
 <html>
 
@@ -47,8 +51,8 @@
     }
 
     #container {
-        width: 100%;
-        max-width: 900px;
+        width: 90%;
+        height: 90%;
         background-color: rgba(222, 226, 230, 0.22);
         border-radius: 5px;
         padding: 18px;
@@ -64,7 +68,27 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/networkgraph.js"></script>
-
+    <?php
+    $subClasses = new SubClasses();
+    $subClassesWithParentClasses = $subClasses->getSubClassesWithParentClass();
+    $nodes = "";
+    $datas = "";
+    if ($subClassesWithParentClasses != null) {
+        foreach ($subClassesWithParentClasses as $classItem) {
+            $nodes .= "{
+                    id: '" . $classItem["class_name"] . "',
+                    marker: {
+                        radius: 30,
+                        width: '450px',
+                        height: '450px'
+                    },
+                    color: 'rgb(50,120,222)',
+                },";
+            $datas .= "['".$classItem["sub_class_name"]."', '".$classItem["class_name"]."'],";
+        }
+        $datas = substr($datas, 0, strlen($datas)-1);
+    }
+    ?>
     <div id="container"></div>
     <script>
         Highcharts.chart('container', {
@@ -103,29 +127,14 @@
                     }
                 },
                 data: [
-                    <?php
-                    echo "['Pantolon', 'Giyim']";
-                    ?>
-                    /*
-                    ['Pantolon', 'Giyim'],
+                    <?php echo $datas; ?>
+                    /*['Pantolon', 'Giyim'],
                     ['Canta', 'Giyim'],
                     ['Gomlek', 'Giyim'],
-                    ['Ayakkabi', 'Giyim']
-                    */
+                    ['Ayakkabi', 'Giyim']*/
+                    
                 ],
-                nodes: [{
-                    id: 'Giyim',
-                    marker: {
-                        radius: 30,
-                        width: '250',
-                        height: '250'
-                    },
-                    color: 'rgb(50,120,222)',
-                    marker: {
-                        width: '150',
-                        height: '150'
-                    }
-                }, ]
+                nodes: [<?php echo $nodes; ?>]
             }]
         });
     </script>

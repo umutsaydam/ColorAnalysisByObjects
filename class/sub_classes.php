@@ -68,4 +68,23 @@ class SubClasses{
         }
         return null;
     }
+
+    function getSubClassesWithParentClass() {
+        $sqlQuery = "SELECT class_id, class_name, sub_class_id, sub_class_name FROM ". $this->db_table ." 
+            INNER JOIN classes 
+                ON sub_classes.main_class_id = classes.class_id";
+
+        $stmt = $this->conn->prepare($sqlQuery);
+        $stmt->execute();
+        $dataRows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $result = array();
+
+        foreach ($dataRows as $dataRow) {
+            $result[] = array("class_id"=>$dataRow["class_id"], "class_name"=>$dataRow["class_name"], "sub_class_id"=>$dataRow["sub_class_id"], "sub_class_name"=>$dataRow["sub_class_name"]);
+        }
+        if ($result != null) {
+            return $result;
+        }
+        return null;
+    }
 }

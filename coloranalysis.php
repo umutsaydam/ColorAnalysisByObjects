@@ -132,11 +132,21 @@ if (isset($_POST["submit"])) {
 </style>
 
 <body>
-    <div class="container custom-spinner d-flex justify-content-center align-items-center" id="spinner">
-        <div class="spinner-border text-primary " style="width: 7rem; height: 7rem;" role="status">
-            <span class="sr-only">Loading...</span>
+    <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="fa-solid fa-bars" style="color: #ffffff; font-size:27px; margin:15px"></i></button>
+
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Menü</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="list-group">
+                <li class="list-group-item"><a href="coloranalysis.php" class="link-underline link-underline-opacity-0" style="color:#3e3e3e; font-size: 18px;"><i class="fa-solid fa-magnifying-glass-chart" style="font-size:12px; font-size: 18px;"></i> Renk analizi yap</a></li>
+                <li class="list-group-item"><a href="colorstatistics.php" class="link-underline link-underline-opacity-0" style="color:#3e3e3e; font-size: 18px;"><i class="fa-solid fa-chart-line" style="font-size:12px; font-size: 18px;"></i> Kategorilere göre renk istatistikleri</a></li>
+            </ul>
         </div>
     </div>
+
     <div class="jumbotron vertical-center">
         <div class="container">
             <div class="row">

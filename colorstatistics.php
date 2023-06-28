@@ -3,7 +3,8 @@ include_once "class/classes.php";
 include_once "class/sub_classes.php";
 include_once "class/color_of_objects.php";
 
-function calculateAverageColor($colors){
+function calculateAverageColor($colors)
+{
     $cnt = count($colors);
     $red = 0.0;
     $green = 0.0;
@@ -38,9 +39,6 @@ function calculateAverageColor($colors){
     body {
         height: 100%;
         margin: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
         background-repeat: no-repeat;
         background-attachment: fixed;
         background-image: linear-gradient(305deg,
@@ -65,6 +63,15 @@ function calculateAverageColor($colors){
         border-radius: 15px;
     }
 
+    .area {
+        width: 100%;
+        height: 90%;
+        margin-top: -50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
     #container {
         width: 90%;
         height: 90%;
@@ -72,6 +79,9 @@ function calculateAverageColor($colors){
         border-radius: 5px;
         padding: 8px;
         border-radius: 15px;
+        -webkit-box-shadow: 0px 0px 59px -20px rgba(0, 0, 0, 0.75);
+        -moz-box-shadow: 0px 0px 59px -20px rgba(0, 0, 0, 0.75);
+        box-shadow: 0px 0px 59px -20px rgba(0, 0, 0, 0.75);
     }
 
     #container {
@@ -80,6 +90,20 @@ function calculateAverageColor($colors){
 </style>
 
 <body>
+    <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="fa-solid fa-bars" style="color: #ffffff; font-size:27px; margin:15px"></i></button>
+
+    <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasWithBothOptionsLabel">Menü</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <ul class="list-group">
+                <li class="list-group-item"><a href="coloranalysis.php" class="link-underline link-underline-opacity-0" style="color:#3e3e3e; font-size: 18px;"><i class="fa-solid fa-magnifying-glass-chart" style="font-size:12px; font-size: 18px;"></i> Renk analizi yap</a></li>
+                <li class="list-group-item"><a href="colorstatistics.php" class="link-underline link-underline-opacity-0" style="color:#3e3e3e; font-size: 18px;"><i class="fa-solid fa-chart-line" style="font-size:12px; font-size: 18px;"></i> Kategorilere göre renk istatistikleri</a></li>
+            </ul>
+        </div>
+    </div>
     <script src="js/bootstrap.min.js"></script>
     <script src="https://code.highcharts.com/highcharts.js"></script>
     <script src="https://code.highcharts.com/modules/networkgraph.js"></script>
@@ -149,7 +173,9 @@ function calculateAverageColor($colors){
     }
     ?>
 
-    <div id="container"></div>
+    <div class="area">
+        <div id="container"></div>
+    </div>
     <script>
         Highcharts.setOptions({
             title: {
@@ -170,7 +196,7 @@ function calculateAverageColor($colors){
                 marginTop: 80
             },
             title: {
-                text: 'Renk Analizi'
+                text: 'Renk İstatistikleri'
             },
             plotOptions: {
                 networkgraph: {

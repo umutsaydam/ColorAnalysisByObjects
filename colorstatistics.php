@@ -3,27 +3,13 @@ include_once "class/classes.php";
 include_once "class/sub_classes.php";
 include_once "class/color_of_objects.php";
 
-function calculateAverageColor($colors)
-{
+function calculateAverageColor($colors){
     $cnt = count($colors);
     $red = 0.0;
     $green = 0.0;
     $blue = 0.0;
     foreach ($colors as $item) {
         $rgb = explode(",", $item);
-        $red += doubleval($rgb[0]);
-        $green += doubleval($rgb[1]);
-        $blue += doubleval($rgb[2]);
-    }
-    return $red / $cnt . "," . $green / $cnt . "," . $blue / $cnt;
-}
-function calculateAverageColorByClass($colorsBySubName){
-    $cnt = count($colorsBySubName);
-    $red = 0.0;
-    $green = 0.0;
-    $blue = 0.0;
-    foreach ($colorsBySubName as $value) {
-        $rgb = explode(",", $value);
         $red += doubleval($rgb[0]);
         $green += doubleval($rgb[1]);
         $blue += doubleval($rgb[2]);
@@ -84,7 +70,7 @@ function calculateAverageColorByClass($colorsBySubName){
         height: 90%;
         background-color: rgba(222, 226, 230, 0.22);
         border-radius: 5px;
-        padding: 18px;
+        padding: 8px;
         border-radius: 15px;
     }
 
@@ -136,7 +122,7 @@ function calculateAverageColorByClass($colorsBySubName){
             if (!isset($statisticOfColorByMainClass[$key])) {
                 $statisticOfColorByMainClass[$key] = [];
             }
-            $statisticOfColorByMainClass[$key] = calculateAverageColorByClass($value);
+            $statisticOfColorByMainClass[$key] = calculateAverageColor($value);
         }
 
         foreach ($statisticOfColor as $classItemKey => $classItemValue) {
@@ -165,18 +151,27 @@ function calculateAverageColorByClass($colorsBySubName){
 
     <div id="container"></div>
     <script>
+        Highcharts.setOptions({
+            title: {
+                style: {
+                    color: '#ffffff',
+                    fontWeight: 'bold',
+                    fontSize: '18px',
+                    fontFamily: 'Trebuchet MS, Verdana, sans-serif'
+                }
+            }
+        });
         Highcharts.chart('container', {
 
             chart: {
                 type: 'networkgraph',
+                backgroundColor: '#3e3e3e',
+                borderRadius: '8px',
                 marginTop: 80
             },
-
             title: {
                 text: 'Renk Analizi'
             },
-
-
             plotOptions: {
                 networkgraph: {
                     keys: ['from', 'to'],
@@ -184,10 +179,17 @@ function calculateAverageColorByClass($colorsBySubName){
                         enableSimulation: true,
                         integration: 'verlet',
                         linkLength: 100
+                    },
+                    dataLabels: {
+                        style: {
+                            color: '#3e3e3e',
+                            fontWeight: 'bold',
+                            fontSize: '15px',
+                            fontFamily: 'Trebuchet MS, Verdana, sans-serif'
+                        }
                     }
-                }
+                },
             },
-
             series: [{
                 marker: {
                     radius: 13,

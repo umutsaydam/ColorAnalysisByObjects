@@ -2,6 +2,34 @@
 include_once "class/classes.php";
 include_once "class/sub_classes.php";
 include_once "class/color_of_objects.php";
+
+function calculateAverageColor($colors)
+{
+    $cnt = count($colors);
+    $red = 0.0;
+    $green = 0.0;
+    $blue = 0.0;
+    foreach ($colors as $item) {
+        $rgb = explode(",", $item);
+        $red += doubleval($rgb[0]);
+        $green += doubleval($rgb[1]);
+        $blue += doubleval($rgb[2]);
+    }
+    return $red / $cnt . "," . $green / $cnt . "," . $blue / $cnt;
+}
+function calculateAverageColorByClass($colorsBySubName){
+    $cnt = count($colorsBySubName);
+    $red = 0.0;
+    $green = 0.0;
+    $blue = 0.0;
+    foreach ($colorsBySubName as $value) {
+        $rgb = explode(",", $value);
+        $red += doubleval($rgb[0]);
+        $green += doubleval($rgb[1]);
+        $blue += doubleval($rgb[2]);
+    }
+    return $red / $cnt . "," . $green / $cnt . "," . $blue / $cnt;
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -74,22 +102,67 @@ include_once "class/color_of_objects.php";
     $subClassesWithParentClasses = $colorOfObjects->getColorsWithParents();
     $nodes = "";
     $datas = "";
+    $colorsByObjects = array();
     if ($subClassesWithParentClasses != null) {
-        foreach ($subClassesWithParentClasses as $classItem) {
-            $nodes .= "{
-                    id: '" . $classItem["class_name"] . "',
-                    marker: {
-                        radius: 50,
-                        width: '150',
-                        height: '150'
-                    },
-                    color: 'rgb(50,120,222)',
-                },";
-            $datas .= "['".$classItem["sub_class_name"]."', '".$classItem["class_name"]."'],";
+        foreach ($subClassesWithParentClasses as $item) {
+            $className = $item['class_name'];
+            $subClassName = $item['sub_class_name'];
+            $colorRgb = $item['color_rgb'];
+            if (!isset($colorsByObjects[$className])) {
+                $colorsByObjects[$className] = [];
+            }
+            if (!isset($colorsByObjects[$className][$subClassName])) {
+                $colorsByObjects[$className][$subClassName] = [];
+            }
+            $colorsByObjects[$className][$subClassName][] = $colorRgb;
         }
-        $datas = substr($datas, 0, strlen($datas)-1);
+
+        $statisticOfColor = array();
+        $statisticOfColorByMainClass = array();
+        foreach ($colorsByObjects as $key => $value) {
+            foreach ($value as $subKey => $subValue) {
+                if (!isset($statisticOfColor[$key])) {
+                    $statisticOfColor[$key] = [];
+                }
+                if (!isset($statisticOfColor[$key][$subKey])) {
+                    $statisticOfColor[$key][$subKey] = [];
+                }
+                $resultOfCalculate = calculateAverageColor($subValue);
+                $statisticOfColor[$key][$subKey] = $resultOfCalculate;
+            }
+        }
+
+        foreach ($statisticOfColor as $key => $value) {
+            if (!isset($statisticOfColorByMainClass[$key])) {
+                $statisticOfColorByMainClass[$key] = [];
+            }
+            $statisticOfColorByMainClass[$key] = calculateAverageColorByClass($value);
+        }
+
+        foreach ($statisticOfColor as $classItemKey => $classItemValue) {
+            $nodes .= "{
+                id: '" . $classItemKey . "',
+                marker: {
+                  radius: 60,
+                },
+                color: 'rgb(" . $statisticOfColorByMainClass[$classItemKey] . ")',
+              },";
+            foreach ($classItemValue as $key => $value) {
+                $nodes .=  "{
+                    id: '" . $key . "',
+                    marker: {
+                      radius: 40,
+                    },
+                    color: 'rgb(" . $value . ")'
+                  },";
+
+                $datas .= "['" . $key . "', '" . $classItemKey . "'],";
+            }
+        }
+        $datas = substr($datas, 0, strlen($datas) - 1);
     }
     ?>
+
     <div id="container"></div>
     <script>
         Highcharts.chart('container', {
@@ -133,7 +206,7 @@ include_once "class/color_of_objects.php";
                     ['Canta', 'Giyim'],
                     ['Gomlek', 'Giyim'],
                     ['Ayakkabi', 'Giyim']*/
-                    
+
                 ],
                 nodes: [<?php echo $nodes; ?>]
             }]

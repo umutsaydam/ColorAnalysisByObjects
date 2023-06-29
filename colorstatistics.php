@@ -11,11 +11,11 @@ function calculateAverageColor($colors)
     $blue = 0.0;
     foreach ($colors as $item) {
         $rgb = explode(",", $item);
-        $red += doubleval($rgb[0]);
-        $green += doubleval($rgb[1]);
-        $blue += doubleval($rgb[2]);
+        $red += floatval($rgb[0]);
+        $green += floatval($rgb[1]);
+        $blue += floatval($rgb[2]);
     }
-    return $red / $cnt . "," . $green / $cnt . "," . $blue / $cnt;
+    return number_format($red / $cnt, 2) . ", " . number_format($green / $cnt, 2) . ", " . number_format($blue / $cnt, 2);
 }
 ?>
 <!DOCTYPE html>
@@ -86,6 +86,15 @@ function calculateAverageColor($colors)
 
     #container {
         margin-top: 50px;
+    }
+
+    .color-box {
+        min-height: 1em;
+        vertical-align: middle;
+        color: #3e3e3e;
+        float: right;
+        border-radius: 20px;
+        text-align: center;
     }
 </style>
 
@@ -240,6 +249,32 @@ function calculateAverageColor($colors)
             }]
         });
     </script>
+
+    <div class="area" style="height:auto !important; margin-top:15px;">
+        <div id="container">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Kategorilerine Göre Renk En Çok Tercih Edilen Renkler</h4>
+                </div>
+                <div class="card-body">
+                    <blockquote class="blockquote mb-0">
+                        <?php
+                        if ($statisticOfColor != null) {
+                            foreach ($statisticOfColor as $key => $value) { ?>
+                                <p><?php echo $key; ?></p>
+                                <?php
+
+                                foreach ($value as $k => $val) { ?>
+                                    <footer class="blockquote-footer mt-2"><b><?php echo $k; ?></b> <cite title="Source Title"></cite><span class="color-box col-10" style="background-color: rgb(<?php echo $val;?>)">rgb(<?php echo $val;?>)</span></footer>
+                        <?php }
+                            }
+                        }
+                        ?>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </body>
 

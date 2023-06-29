@@ -96,6 +96,22 @@ function calculateAverageColor($colors)
         border-radius: 20px;
         text-align: center;
     }
+
+    .statistic-title {
+        font-size: 1.5rem;
+        border-bottom: 2px solid #eaeaea;
+        padding: 2px;
+    }
+
+    .statistic-sub-class {
+        color: #3e3e3e;
+        padding-top: 10px;
+    }
+
+    .count-of-data {
+        font-size: 0.9rem;
+        opacity: 0.7;
+    }
 </style>
 
 <body>
@@ -138,19 +154,23 @@ function calculateAverageColor($colors)
 
         $statisticOfColor = array();
         $statisticOfColorByMainClass = array();
+        $statisticOfColorByCount = array();
         foreach ($colorsByObjects as $key => $value) {
             foreach ($value as $subKey => $subValue) {
                 if (!isset($statisticOfColor[$key])) {
                     $statisticOfColor[$key] = [];
+                    $statisticOfColorByCount[$key] = [];
                 }
                 if (!isset($statisticOfColor[$key][$subKey])) {
                     $statisticOfColor[$key][$subKey] = [];
+                    $statisticOfColorByCount[$key][$subKey] = [];
                 }
+                //echo $key." ".$subKey." ".json_encode(count($subValue))."-";
+                $statisticOfColorByCount[$key][$subKey] = count($subValue);
                 $resultOfCalculate = calculateAverageColor($subValue);
                 $statisticOfColor[$key][$subKey] = $resultOfCalculate;
             }
         }
-
         foreach ($statisticOfColor as $key => $value) {
             if (!isset($statisticOfColorByMainClass[$key])) {
                 $statisticOfColorByMainClass[$key] = [];
@@ -258,14 +278,15 @@ function calculateAverageColor($colors)
                 </div>
                 <div class="card-body">
                     <blockquote class="blockquote mb-0">
-                        <?php
+                        <?php // $statisticOfColorByCount[$key][$k]
                         if ($statisticOfColor != null) {
                             foreach ($statisticOfColor as $key => $value) { ?>
-                                <p><?php echo $key; ?></p>
+                                <p class="statistic-title"><?php echo $key; ?></p>
                                 <?php
-
                                 foreach ($value as $k => $val) { ?>
-                                    <footer class="blockquote-footer mt-2"><b><?php echo $k; ?></b> <cite title="Source Title"></cite><span class="color-box col-10" style="background-color: rgb(<?php echo $val;?>)">rgb(<?php echo $val;?>)</span></footer>
+                                    <footer class="blockquote-footer mt-2 statistic-sub-class"><b><?php echo $k; ?></b> <cite title="Source Title"></cite><span class="color-box col-10" style="background-color: rgb(<?php echo $val; ?>)">rgb(<?php echo $val; ?>)</span>
+                                        <p class="count-of-data"><?php echo "(" . $statisticOfColorByCount[$key][$k] . " adet veri ile hesaplanmıştır.)"; ?></p>
+                                    </footer>
                         <?php }
                             }
                         }

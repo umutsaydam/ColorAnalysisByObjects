@@ -88,6 +88,13 @@ function calculateAverageColor($colors)
         margin-top: 50px;
     }
 
+    .time-line-btn {
+        display: flex;
+        width: 50%;
+        align-items: center;
+        justify-content: center;
+    }
+
     .color-box {
         min-height: 1em;
         vertical-align: middle;
@@ -275,27 +282,39 @@ function calculateAverageColor($colors)
             <div class="card">
                 <div class="card-header">
                     <h4>Kategorilerine Göre Renk En Çok Tercih Edilen Renkler</h4>
-                </div>
-                <div class="card-body">
-                    <blockquote class="blockquote mb-0">
-                        <?php // $statisticOfColorByCount[$key][$k]
-                        if ($statisticOfColor != null) {
-                            foreach ($statisticOfColor as $key => $value) { ?>
-                                <p class="statistic-title"><?php echo $key; ?></p>
-                                <?php
-                                foreach ($value as $k => $val) { ?>
-                                    <footer class="blockquote-footer mt-2 statistic-sub-class"><b><?php echo $k; ?></b> <cite title="Source Title"></cite><span class="color-box col-10" style="background-color: rgb(<?php echo $val; ?>)">rgb(<?php echo $val; ?>)</span>
-                                        <p class="count-of-data"><?php echo "(" . $statisticOfColorByCount[$key][$k] . " adet veri ile hesaplanmıştır.)"; ?></p>
-                                    </footer>
-                        <?php }
+                    <div class="col-md-12 d-flex align-items-center justify-content-center mt-5">
+                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
+                            <label class="btn btn-outline-primary" for="btnradio1">Tüm zamanlar</label>
+
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="btnradio2">Geçen yıl</label>
+
+                            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
+                            <label class="btn btn-outline-primary" for="btnradio3">Bu yıl</label>
+                        </div>
+                    </div>
+
+                    <div class="card-body" style="padding: 0 !important">
+                        <blockquote class="blockquote mb-0">
+                            <?php // $statisticOfColorByCount[$key][$k]
+                            if ($statisticOfColor != null) {
+                                foreach ($statisticOfColor as $key => $value) { ?>
+                                    <p class="statistic-title"><?php echo $key; ?></p>
+                                    <?php
+                                    foreach ($value as $k => $val) { ?>
+                                        <footer class="blockquote-footer mt-2 statistic-sub-class"><b><?php echo $k; ?></b> <cite title="Source Title"></cite><span class="color-box col-10" style="background-color: rgb(<?php echo $val; ?>)">rgb(<?php echo $val; ?>)</span>
+                                            <p class="count-of-data"><?php echo "(" . $statisticOfColorByCount[$key][$k] . " adet veri ile hesaplanmıştır.)"; ?></p>
+                                        </footer>
+                            <?php }
+                                }
                             }
-                        }
-                        ?>
-                    </blockquote>
+                            ?>
+                        </blockquote>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
 </body>
 

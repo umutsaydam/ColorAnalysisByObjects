@@ -54,12 +54,26 @@ class color_of_objects{
         return null;
     }
 
-    function getColorsWithParents() {
-        $sqlQuery = "SELECT class_id, class_name, sub_class_id, sub_class_name, color_of_object_id, color_rgb FROM classes
-            INNER JOIN (SELECT main_class_id, sub_class_id, sub_class_name, color_of_object_id, color_rgb FROM color_of_objects 
-                INNER JOIN sub_classes
-                    ON color_of_objects.sub_class = sub_classes.sub_class_id) as fullData
-                        ON fullData.main_class_id = classes.class_id;";
+    function getColorsWithParents($queryByDate = "") {
+        $sqlQuery = "SELECT class_id, class_name, sub_class_id, sub_class_name, color_of_object_id, color_rgb, analysis_time FROM classes
+        INNER JOIN (SELECT main_class_id, sub_class_id, sub_class_name, color_of_object_id, color_rgb, analysis_time FROM color_of_objects 
+            INNER JOIN sub_classes
+                ON color_of_objects.sub_class = sub_classes.sub_class_id) as fullData
+                    ON fullData.main_class_id = classes.class_id";
+
+        switch ($queryByDate) {
+            case 'lastyear':
+                $year = intval(date("Y"))-1;
+                $sqlQuery .= " WHERE analysis_time BETWEEN '".$year."-01-01 00:00:00' AND '".$year."-12-30 00:00:00'";
+                break;
+            case 'thisyear':
+                $year = date("Y");
+                $sqlQuery .= " WHERE analysis_time BETWEEN '".$year."-01-01 00:00:00' AND '".$year."-12-30 00:00:00'";
+                break;
+            default:
+                # code...
+                break;
+        }
         
         $stmt = $this->conn->prepare($sqlQuery);
         $stmt->execute();

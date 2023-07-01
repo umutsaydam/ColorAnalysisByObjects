@@ -141,10 +141,18 @@ function calculateAverageColor($colors)
     <script src="https://code.highcharts.com/modules/networkgraph.js"></script>
     <?php
     $colorOfObjects = new color_of_objects();
-    $subClassesWithParentClasses = $colorOfObjects->getColorsWithParents();
+    $subClassesWithParentClasses = null;
+    $analyzesTimeFilter = "alltimes";
+    if (isset($_GET["filterradio"])) {
+        $analyzesTimeFilter = $_GET["filterradio"];
+        $subClassesWithParentClasses = $colorOfObjects->getColorsWithParents($analyzesTimeFilter);
+    } else {
+        $subClassesWithParentClasses = $colorOfObjects->getColorsWithParents();
+    }
     $nodes = "";
     $datas = "";
     $colorsByObjects = array();
+    $statisticOfColor = array();
     if ($subClassesWithParentClasses != null) {
         foreach ($subClassesWithParentClasses as $item) {
             $className = $item['class_name'];
@@ -159,7 +167,7 @@ function calculateAverageColor($colors)
             $colorsByObjects[$className][$subClassName][] = $colorRgb;
         }
 
-        $statisticOfColor = array();
+
         $statisticOfColorByMainClass = array();
         $statisticOfColorByCount = array();
         foreach ($colorsByObjects as $key => $value) {
@@ -282,23 +290,41 @@ function calculateAverageColor($colors)
             <div class="card">
                 <div class="card-header">
                     <h4>Kategorilerine Göre Renk En Çok Tercih Edilen Renkler</h4>
-                    <div class="col-md-12 d-flex align-items-center justify-content-center mt-5">
-                        <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio1" autocomplete="off" checked>
-                            <label class="btn btn-outline-primary" for="btnradio1">Tüm zamanlar</label>
+                    <p>
+                        <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+                            <i class="fa-solid fa-filter"></i> Filtrele
+                        </a>
+                    </p>
+                    <div class="collapse" id="collapseExample">
+                        <div class="card card-body">
+                            <form action="colorstatistics.php" method="GET">
+                                <ul>
+                                    <li class="list-group-item">
+                                        <div class="col-md-12 d-flex align-items-center justify-content-center">
+                                            <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
+                                                <input type="radio" class="btn-check" name="filterradio" value="alltimes" id="btnradio1" autocomplete="off" <?php echo $analyzesTimeFilter == "alltimes" ? "checked" : ""; ?>>
+                                                <label class="btn btn-outline-primary" for="btnradio1">Tüm zamanlar</label>
 
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio2" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="btnradio2">Geçen yıl</label>
+                                                <input type="radio" class="btn-check" name="filterradio" value="lastyear" id="btnradio2" autocomplete="off" <?php echo $analyzesTimeFilter == "lastyear" ? "checked" : ""; ?>>
+                                                <label class="btn btn-outline-primary" for="btnradio2">Geçen yıl</label>
 
-                            <input type="radio" class="btn-check" name="btnradio" id="btnradio3" autocomplete="off">
-                            <label class="btn btn-outline-primary" for="btnradio3">Bu yıl</label>
+                                                <input type="radio" class="btn-check" name="filterradio" value="thisyear" id="btnradio3" autocomplete="off" <?php echo $analyzesTimeFilter == "thisyear" ? "checked" : ""; ?>>
+                                                <label class="btn btn-outline-primary" for="btnradio3">Bu yıl</label>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="col-md-12 d-flex align-items-center justify-content-center mt-3">
+                                        <input type="submit" class="btn btn-primary" value="Filtrele">
+                                    </li>
+                                </ul>
+                            </form>
                         </div>
                     </div>
 
                     <div class="card-body" style="padding: 0 !important">
                         <blockquote class="blockquote mb-0">
                             <?php // $statisticOfColorByCount[$key][$k]
-                            if ($statisticOfColor != null) {
+                            if (count($statisticOfColor) > 0) {
                                 foreach ($statisticOfColor as $key => $value) { ?>
                                     <p class="statistic-title"><?php echo $key; ?></p>
                                     <?php
@@ -306,9 +332,13 @@ function calculateAverageColor($colors)
                                         <footer class="blockquote-footer mt-2 statistic-sub-class"><b><?php echo $k; ?></b> <cite title="Source Title"></cite><span class="color-box col-10" style="background-color: rgb(<?php echo $val; ?>)">rgb(<?php echo $val; ?>)</span>
                                             <p class="count-of-data"><?php echo "(" . $statisticOfColorByCount[$key][$k] . " adet veri ile hesaplanmıştır.)"; ?></p>
                                         </footer>
-                            <?php }
+                                <?php }
                                 }
-                            }
+                            } else { ?>
+                                <div class="alert alert-dark" role="alert">
+                                    Veri bulunamadı.
+                                </div>
+                            <?php }
                             ?>
                         </blockquote>
                     </div>

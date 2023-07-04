@@ -55,6 +55,7 @@ if (isset($_POST["submit"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script type="text/javascript" src="js/events.js"></script>
 </head>
 <style>
     html {
@@ -119,7 +120,7 @@ if (isset($_POST["submit"])) {
     }
 
     .custom-spinner {
-        padding: 15%;
+        padding: 49%;
         background-color: rgb(157 157 157 / 80%);
         border-radius: 10px;
         position: absolute;
@@ -127,11 +128,19 @@ if (isset($_POST["submit"])) {
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 2;
-        display: none !important;
+        visibility: hidden;
     }
 </style>
 
 <body>
+    <div class="custom-spinner" id="spinner">
+        <div class="text-center">
+            <div class="spinner-border" style="width: 100px; height: 100px;" role="status">
+                
+            </div>
+            <span>Analiz ediliyor...</span>
+        </div>
+    </div>
     <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="fa-solid fa-bars" style="color: #ffffff; font-size:27px; margin:15px"></i></button>
 
     <div class="offcanvas offcanvas-start" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
@@ -175,7 +184,7 @@ if (isset($_POST["submit"])) {
                             <input class="form-control" type="file" accept="image/*" name="file[]" multiple="multiple" style="height:100%; background-color: transparent !important; padding-bottom: 15%;" multiple />
                         </div>
                         <div class="row justify-content-center align-items-center mt-5">
-                            <input class="btn btn-light col-md-3 btn-radius p-3 mb-4" onclick="disabledBtn()" id="uploadBtn" type="submit" name="submit" value="Yükle" />
+                            <input class="btn btn-light col-md-3 btn-radius p-3 mb-4" onclick="toggleLoadingSpinner()" id="uploadBtn" type="submit" name="submit" value="Yükle" />
                         </div>
 
                         <?php if ($result != null) {
@@ -248,7 +257,6 @@ if (isset($_POST["submit"])) {
         </div>
     </div>
     <script src="js/bootstrap.min.js"></script>
-    <script src="js/events.js"></script>
 </body>
 
 </html>

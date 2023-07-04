@@ -28,10 +28,7 @@ if (isset($_POST["submit"])) {
             }
             if ($fileNames != null) {
                 $result = shell_exec("python detect.py " . json_encode($fileNames) . "*" . $subClassID);
-                if (trim($result) == "not found") {
-                    $result = null;
-                    
-                }
+                $result = trim($result);
             }
         } else { ?>
             <div class="alert alert-dark" role="alert">
@@ -122,7 +119,7 @@ if (isset($_POST["submit"])) {
 
     .custom-spinner {
         padding: 49%;
-        background-color: rgb(157 157 157 / 80%);
+        background-color: rgb(75 75 75 / 90%);
         border-radius: 10px;
         position: absolute;
         top: 50%;
@@ -136,9 +133,8 @@ if (isset($_POST["submit"])) {
 <body>
     <div class="custom-spinner" id="spinner">
         <div class="text-center">
-            <div class="spinner-border" style="width: 100px; height: 100px;" role="status">
-                
-            </div>
+            <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+            <lottie-player src="https://assets8.lottiefiles.com/packages/lf20_amkX7EsOUD.json" background="transparent" speed="1" style="width: 450px; height: 450px;" loop autoplay></lottie-player>
             <span>Analiz ediliyor...</span>
         </div>
     </div>
@@ -188,7 +184,8 @@ if (isset($_POST["submit"])) {
                             <input class="btn btn-light col-md-3 btn-radius p-3 mb-4" onclick="toggleLoadingSpinner()" id="uploadBtn" type="submit" name="submit" value="Yükle" />
                         </div>
 
-                        <?php if ($result != null) {
+                        <?php
+                        if ($result != null && $result != "not found") {
                             $result = trim($result);
                             echo $result;
                             $result = explode("/", $result)[0];
@@ -251,6 +248,14 @@ if (isset($_POST["submit"])) {
                                     }
                                 ?>
                             </div>
+                        <?php } else if ($result == "not found") { ?>
+                            <div class="row justify-content-center align-items-center mt-2 mb-5">
+                                <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+                                <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_muewqymz.json" background="transparent" speed="1" style="width: 550px; height: 550px;" loop autoplay></lottie-player>
+                                <div class="row">
+                                <h4 class="text-center mb-4 text-light">Maalesef veriler üzerinde istenen kategorideki nesneyi tespit edemedik. </h4>
+                            </div>
+                            </div>
                         <?php } ?>
                     </div>
                 </form>
@@ -258,6 +263,7 @@ if (isset($_POST["submit"])) {
         </div>
     </div>
     <script src="js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </body>
 
 </html>

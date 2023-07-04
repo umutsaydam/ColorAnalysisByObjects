@@ -135,7 +135,7 @@ if (isset($_POST["submit"])) {
         <div class="text-center">
             <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
             <lottie-player src="https://assets8.lottiefiles.com/packages/lf20_amkX7EsOUD.json" background="transparent" speed="1" style="width: 450px; height: 450px;" loop autoplay></lottie-player>
-            <span>Analiz ediliyor...</span>
+            <h5 class="text-center text-light">Analiz ediliyor...</h5>
         </div>
     </div>
     <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions"><i class="fa-solid fa-bars" style="color: #ffffff; font-size:27px; margin:15px"></i></button>

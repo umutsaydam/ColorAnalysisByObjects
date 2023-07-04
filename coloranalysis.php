@@ -28,8 +28,9 @@ if (isset($_POST["submit"])) {
             }
             if ($fileNames != null) {
                 $result = shell_exec("python detect.py " . json_encode($fileNames) . "*" . $subClassID);
-                if ($result == "failed") {
-                    echo "HATA";
+                if (trim($result) == "not found") {
+                    $result = null;
+                    
                 }
             }
         } else { ?>

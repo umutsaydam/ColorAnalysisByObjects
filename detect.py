@@ -23,18 +23,23 @@ def read_image_label(path_to_img: str, path_to_txt: str):
     image = cv2.imread(path_to_img)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
     img_h, img_w = image.shape[:2]
-    
+
     global cls_obj
     obj_cnvrt_obj = []
-    with open(path_to_txt, "r") as k:
-      for x in k.readlines():
-        info = x.split()
-        cls_obj.append(info[0])
-        obj_coords = info[1:]
-        obj_cnvrt_obj.append((np.array([[eval(x), eval(y)] for x, y in zip(obj_coords[0::2], obj_coords[1::2])])).astype(np.float))
-        #datas.append(x[2:-2])  
-        with open("path.txt", "a") as f:
-          f.write(cls_obj[0]+" ")
+
+    try:
+      with open(path_to_txt, "r") as k:
+        for x in k.readlines():
+          info = x.split()
+          cls_obj.append(info[0])
+          obj_coords = info[1:]
+          obj_cnvrt_obj.append((np.array([[eval(x), eval(y)] for x, y in zip(obj_coords[0::2], obj_coords[1::2])])).astype(np.float))
+          #datas.append(x[2:-2])  
+          with open("path.txt", "a") as f:
+            f.write(cls_obj[0]+" ")
+    except:
+      print("not found")
+      sys.exit()
 
     for x in range(0,len(obj_cnvrt_obj)):
       obj_cnvrt_obj[x][:,0] = obj_cnvrt_obj[x][:,0]*img_w

@@ -1,5 +1,5 @@
 # Color Analysis By Objects
-### [TR](https://github.com/umutsaydam/ColorAnalysisByObjects/blob/main/README.md?plain=1#L9)
+### [TR](https://github.com/umutsaydam/ColorAnalysisByObjects/blob/main/README.md?#L9)
 Bu proje ile obje bazında en çok kullanılan üç rengin belirlenerek veri tabanına kaydedilmesi ve böylece dönemlere göre insanların tercih ettiği renk alışkanlıklarının ortaya çıkarılması amaçlanmaktadır.
 ****
 ### EN

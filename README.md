@@ -6,14 +6,14 @@ Bu proje ile obje bazında en çok kullanılan üç rengin belirlenerek veri tab
 With this project, it is aimed to determine the three most used colors on the basis of objects and to save them in the database, thus revealing the color habits preferred by people according to the periods.
 ****
 
-**1. Training Machine with custom cloth datas**
- - First nested list item
+**1. Makineyi, kategorileştirilmiş veriler ile eğitmek**
+ - Kategorilerine göre (giyim vs.) sınıflandırılmış verileri ayrı ayrı eğiterek nesneyi doğru tespit etme oranı artırıldı.
 
-**2. Training Machine with custom cloth datas**
- - First nested list item
+**2. Instance segmentation Region of interest**
+ - Instance segmentation ile ilgili nesnenin tam konumlarını tespit edip, Region of interest algoritmasıyla tespit edilen nesnenin koordinatlarına göre kırpılması sağlandı.
 
-**3. Training Machine with custom cloth datas**
- - First nested list item
+**3. Ortalama renk analizi ve Kmeans**
+ - Kırpılmış nesneler üzerinde ağırlıklı olarak bulunan üç renk tespit edilerek verilerin kategoriye gmre depolanması. 
 
-**4. Training Machine with custom cloth datas**
- - First nested list item
+**4. Depolanan veriler doğrultusunda kullanıcıların kategoriye ve zamana göre renk alışkanlıklarının tespiti **
+ - Toplanan veriler sayesinde network grafiği ile kategorilere göre renk alışkanlıklarının tespiti.

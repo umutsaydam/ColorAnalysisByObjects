@@ -1,12 +1,12 @@
 # Color Analysis By Objects
 ### TR
 Bu proje ile obje bazında en çok kullanılan üç rengin belirlenerek veri tabanına kaydedilmesi ve böylece dönemlere göre insanların tercih ettiği renk alışkanlıklarının ortaya çıkarılması amaçlanmaktadır.
-- [Gerçekleştirilen adımlar](#Gerçekleştirilen adımlar)
+- [Daha fazlası için](#Gerçekleştirilen-adımlar)
 ****
 ### [EN](#Description)
 With this project, it is aimed to determine the three most used colors on the basis of objects and to save them in the database, thus revealing the color habits preferred by people according to the periods.
 
-### Gerçekleştirilen adımlar
+### Gerçekleştirilen-adımlar
 **1. Makineyi, kategorileştirilmiş veriler ile eğitmek**
  - Kategorilerine göre (giyim vs.) sınıflandırılmış verileri ayrı ayrı eğiterek nesneyi doğru tespit etme oranı artırıldı.
 

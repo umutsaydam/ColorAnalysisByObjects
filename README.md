@@ -9,9 +9,10 @@
     <img src="https://private-user-images.githubusercontent.com/69711134/251746740-0116378a-54b3-4a79-825e-80bab2ee5d61.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJrZXkxIiwiZXhwIjoxNjg4NzM4MDAwLCJuYmYiOjE2ODg3Mzc3MDAsInBhdGgiOiIvNjk3MTExMzQvMjUxNzQ2NzQwLTAxMTYzNzhhLTU0YjMtNGE3OS04MjVlLTgwYmFiMmVlNWQ2MS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBSVdOSllBWDRDU1ZFSDUzQSUyRjIwMjMwNzA3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDIzMDcwN1QxMzQ4MjBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lYzZkZGJhNjY3MjI2N2ExMjYwZDQyNmQ1MTEyYmQ0YzJkODAyMWM3ODVkYjdmOWRkNjg1ZGI5YjE4ZGY0ZGZkJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.sIP37SxoRP6Xyj0zjeon5Af7OVctnY_yk42WngWCbyk" alt="EN"/>
   </a>
 </p>
+<span id="user_content-amac"></span>
 </br>
 
-<h2 id="user-content-amac">Amaç</h2>
+<h2 id="user-content-amac1">Amaç</h2>
 Bu proje ile obje bazında en çok kullanılan üç rengin belirlenerek veri tabanına kaydedilmesi ve böylece dönemlere göre insanların tercih ettiği renk alışkanlıklarının ortaya çıkarılması amaçlanmaktadır.
 
 ### ![steps](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/bb363b72-ac7b-49a7-a0b7-fbb9303d9a70) Gerçekleştirilen-adımlar

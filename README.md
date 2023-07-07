@@ -5,7 +5,7 @@
 </a>
 </br>
 
-### <h2 id="#Amaç">Amaç</h2>
+<h2 id="#Amaç">Amaç</h2>
 Bu proje ile obje bazında en çok kullanılan üç rengin belirlenerek veri tabanına kaydedilmesi ve böylece dönemlere göre insanların tercih ettiği renk alışkanlıklarının ortaya çıkarılması amaçlanmaktadır.
 
 ### ![steps](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/bb363b72-ac7b-49a7-a0b7-fbb9303d9a70) Gerçekleştirilen-adımlar

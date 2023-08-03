@@ -1,15 +1,4 @@
 # Color Analysis By Objects
-
-<p align="center">
-  <a href="#user-content-amac">
-   <img src="https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/ff7574b1-52ab-46ed-b082-79948a457eb0" alt="TR"/>
-  </a>
-
-  <a href="#user-content-aim">
-    <img src="https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/b51a8d7f-78b1-4f34-8c5b-2f3ac6a6d0c4" alt="EN"/>
-  </a>
-</p>
-
 <h2 id="user-content-amac">Amaç</h2>
 Bu proje ile obje bazında en çok kullanılan üç rengin belirlenerek veri tabanına kaydedilmesi ve böylece dönemlere göre insanların tercih ettiği renk alışkanlıklarının ortaya çıkarılması amaçlanmaktadır.
 

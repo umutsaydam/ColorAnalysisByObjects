@@ -2,11 +2,11 @@
 
 <p align="center">
   <a href="#user-content-amac">
-    <img src="https://private-user-images.githubusercontent.com/69711134/251746733-ee1c10f3-2ad3-492b-b4a5-f4a32b85d37b.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJrZXkxIiwiZXhwIjoxNjg4NzM4NjM0LCJuYmYiOjE2ODg3MzgzMzQsInBhdGgiOiIvNjk3MTExMzQvMjUxNzQ2NzMzLWVlMWMxMGYzLTJhZDMtNDkyYi1iNGE1LWY0YTMyYjg1ZDM3Yi5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBSVdOSllBWDRDU1ZFSDUzQSUyRjIwMjMwNzA3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDIzMDcwN1QxMzU4NTRaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT05NDRiNTIzN2EzZjEwMWI2NjY0NTQ5OTBlMjI5MTJlMDg3YTcxY2IzNzA4NThlNTAwNzMyZmU3OWJlMzY2MGRiJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.nU3qVgIhJjpyUf6hJgHKNaiHxN_PDWh1VZ1-zx_Amlw" alt="TR"/>
+   <img src="https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/ff7574b1-52ab-46ed-b082-79948a457eb0" alt="TR"/>
   </a>
 
   <a href="#user-content-aim">
-    <img src="https://private-user-images.githubusercontent.com/69711134/251746740-0116378a-54b3-4a79-825e-80bab2ee5d61.png?jwt=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJrZXkiOiJrZXkxIiwiZXhwIjoxNjg4NzM4MDAwLCJuYmYiOjE2ODg3Mzc3MDAsInBhdGgiOiIvNjk3MTExMzQvMjUxNzQ2NzQwLTAxMTYzNzhhLTU0YjMtNGE3OS04MjVlLTgwYmFiMmVlNWQ2MS5wbmc_WC1BbXotQWxnb3JpdGhtPUFXUzQtSE1BQy1TSEEyNTYmWC1BbXotQ3JlZGVudGlhbD1BS0lBSVdOSllBWDRDU1ZFSDUzQSUyRjIwMjMwNzA3JTJGdXMtZWFzdC0xJTJGczMlMkZhd3M0X3JlcXVlc3QmWC1BbXotRGF0ZT0yMDIzMDcwN1QxMzQ4MjBaJlgtQW16LUV4cGlyZXM9MzAwJlgtQW16LVNpZ25hdHVyZT1lYzZkZGJhNjY3MjI2N2ExMjYwZDQyNmQ1MTEyYmQ0YzJkODAyMWM3ODVkYjdmOWRkNjg1ZGI5YjE4ZGY0ZGZkJlgtQW16LVNpZ25lZEhlYWRlcnM9aG9zdCZhY3Rvcl9pZD0wJmtleV9pZD0wJnJlcG9faWQ9MCJ9.sIP37SxoRP6Xyj0zjeon5Af7OVctnY_yk42WngWCbyk" alt="EN"/>
+    <img src="https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/b51a8d7f-78b1-4f34-8c5b-2f3ac6a6d0c4" alt="EN"/>
   </a>
 </p>
 
@@ -33,6 +33,13 @@ Bu proje ile obje bazında en çok kullanılan üç rengin belirlenerek veri tab
     ![istatistikGraf](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/6cfc64ad-3809-431a-8b37-e07dc7826df8)
     
     ![istatistikYazi](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/091597ee-8d0f-446a-abaf-8b4b0056ea98)
+
+    
+**5. Kurulum**
+- requirements.txt içerisindekiler kurulmalı.
+  ```
+  pip install -r FILE_PATH/requirements.txt
+  ```
 
 
 ***
@@ -62,3 +69,10 @@ With this project, it is aimed to determine the three most used colors on the ba
     ![istatistikGraf](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/6cfc64ad-3809-431a-8b37-e07dc7826df8)
     
     ![istatistikYazi](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/091597ee-8d0f-446a-abaf-8b4b0056ea98)
+
+
+    **5. Installation**
+- requirements.txt contents must be installed.
+  ```
+  pip install -r FILE_PATH/requirements.txt
+  ```

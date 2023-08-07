@@ -1,7 +1,7 @@
 # Color Analysis By Objects
 
 **Note**
-> The app is still in beta. If you use this app, you will need the database. I can share with you because I gues I will not deal with this project anymore. Contact me umutsaydam24@gmail.com
+> The app is still in beta and There is a stage to finish (identify data by classifying because accurate detection rate will increase). If you use this app, you will need the database. I can share with you because I gues I will not deal with this project anymore. Contact me umutsaydam24@gmail.com. Before starting this project, I had no idea how to do this, but when I started the project, everything became clear. The make a long story, Just Do It !
 
 
 <h3><a href="#user-content-amac">TR</a></h3>

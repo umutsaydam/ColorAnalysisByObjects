@@ -1,27 +1,32 @@
 # Color Analysis By Objects
+
+<h3><a href="#user-content-amac">TR</a></h3>
+<h3><a href="#user-content-aim">EN</a></h3>
+
 <h2 id="user-content-amac">Amaç</h2>
 Bu proje ile obje bazında en çok kullanılan üç rengin belirlenerek veri tabanına kaydedilmesi ve böylece dönemlere göre insanların tercih ettiği renk alışkanlıklarının ortaya çıkarılması amaçlanmaktadır.
 
-### ![steps](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/bb363b72-ac7b-49a7-a0b7-fbb9303d9a70) Gerçekleştirilen-adımlar
+### 🦶 Gerçekleştirilen-adımlar
  **1. Makineyi, kategorileştirilmiş veriler ile eğitmek**
   - Kategorilerine göre (giyim vs.) sınıflandırılmış verileri ayrı ayrı eğiterek nesneyi doğru tespit etme oranı artırıldı.
  
  **2. Instance segmentation Region of interest**
   - Instance segmentation ile ilgili nesnenin tam konumlarını tespit edip, Region of interest algoritmasıyla tespit edilen nesnenin koordinatlarına göre kırpılması sağlandı.
     
-   ![stagesOfDetection](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/3cb435b7-badd-47eb-a50c-233eae96ea04)
+   ![stages_of_detection](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/60ff8e88-36d8-434e-ae1a-78483b36ac3c)
  
  **3. Ortalama renk analizi ve Kmeans**
-  - Kırpılmış nesneler üzerinde ağırlıklı olarak bulunan üç renk tespit edilerek verilerin kategoriye gmre depolanması.
+  - Kırpılmış nesneler üzerinde ağırlıklı olarak bulunan üç renk tespit edilerek verilerin kategoriye göre depolanması.
 
-    ![renkTespitSonucu](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/ba5508aa-6b27-4fac-861e-e7c21e153331)
+    ![result_of_detection](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/8f1f31e4-d540-4ce1-b9fa-ff1d37563469)
  
  **4. Depolanan veriler doğrultusunda kullanıcıların kategoriye ve zamana göre renk alışkanlıklarının tespiti**
   - Toplanan veriler sayesinde network grafiği ile kategorilere göre renk alışkanlıklarının tespiti.
+
+   ![graph](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/b0238a8c-3272-42ae-843c-02f76c5ce96c)
     
-    ![istatistikGraf](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/6cfc64ad-3809-431a-8b37-e07dc7826df8)
-    
-    ![istatistikYazi](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/091597ee-8d0f-446a-abaf-8b4b0056ea98)
+  ![statistics](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/f32f23d7-b7fc-4122-817f-da45c5ba73fc)
+
 
     
 **5. Kurulum**
@@ -38,29 +43,29 @@ With this project, it is aimed to determine the three most used colors on the ba
 
 
 
-### ![steps](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/bb363b72-ac7b-49a7-a0b7-fbb9303d9a70) Steps-Taken
+### 🦶 Steps-Taken
  **1. Makineyi, kategorileştirilmiş veriler ile eğitmek**
   - Kategorilerine göre (giyim vs.) sınıflandırılmış verileri ayrı ayrı eğiterek nesneyi doğru tespit etme oranı artırıldı.
  
  **2. Instance segmentation Region of interest**
   - Instance segmentation ile ilgili nesnenin tam konumlarını tespit edip, Region of interest algoritmasıyla tespit edilen nesnenin koordinatlarına göre kırpılması sağlandı.
     
-   ![stagesOfDetection](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/3cb435b7-badd-47eb-a50c-233eae96ea04)
+   ![stages_of_detection](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/60ff8e88-36d8-434e-ae1a-78483b36ac3c)
  
  **3. Ortalama renk analizi ve Kmeans**
   - Kırpılmış nesneler üzerinde ağırlıklı olarak bulunan üç renk tespit edilerek verilerin kategoriye gmre depolanması.
 
-    ![renkTespitSonucu](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/ba5508aa-6b27-4fac-861e-e7c21e153331)
+    ![result_of_detection](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/8f1f31e4-d540-4ce1-b9fa-ff1d37563469)
  
  **4. Depolanan veriler doğrultusunda kullanıcıların kategoriye ve zamana göre renk alışkanlıklarının tespiti**
   - Toplanan veriler sayesinde network grafiği ile kategorilere göre renk alışkanlıklarının tespiti.
     
-    ![istatistikGraf](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/6cfc64ad-3809-431a-8b37-e07dc7826df8)
+   ![graph](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/b0238a8c-3272-42ae-843c-02f76c5ce96c)
     
-    ![istatistikYazi](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/091597ee-8d0f-446a-abaf-8b4b0056ea98)
+  ![statistics](https://github.com/umutsaydam/ColorAnalysisByObjects/assets/69711134/f32f23d7-b7fc-4122-817f-da45c5ba73fc)
 
 
-    **5. Installation**
+**5. Installation**
 - requirements.txt contents must be installed.
   ```
   pip install -r FILE_PATH/requirements.txt

@@ -1,5 +1,9 @@
 # Color Analysis By Objects
 
+**Note**
+> The app is still in beta. If you use this app, you will need the database. I can share with you because I gues I will not deal with this project anymore. Contact me umutsaydam24@gmail.com
+
+
 <h3><a href="#user-content-amac">TR</a></h3>
 <h3><a href="#user-content-aim">EN</a></h3>
 

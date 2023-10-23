@@ -9,7 +9,7 @@ file_name = ''
 cls_obj = []
 def detect(path_main_file, weightOfName):
   global target_file_dir
-  runPredict = "python yolov5/segment/predict.py --weights "+weightOfName+" --img 416 --conf 0.25 --source "+ path_main_file +" --save-txt"
+  runPredict = "python yolov5/segment/predict.py --weights "+weightOfName+" --img 640 --conf 0.25 --source "+ path_main_file +" --save-txt"
   result = os.system(runPredict)
   if result == 0:
     return True
@@ -50,7 +50,8 @@ from sklearn.cluster import KMeans
 def cropImg(listCoors : np.ndarray, path_main_file: str, ind : int):
   # original image
   # -1 loads as-is so if it will be 3 or 4 channel as the original
-  image = cv2.imread(path_main_file, -1)
+  # -1 some photos may rotate so it should be 3
+  image = cv2.imread(path_main_file, 3)
   # mask defaulting to black for 3-channel and transparent for 4-channel
   # (of course replace corners with yours)
   #mask = np.zeros(image.shape, dtype=np.uint8)
@@ -110,7 +111,7 @@ if lenOfSysArgv > 1:
    # [uploads\/e63ef34244786455f883b4a6e6e211d5720aa58e\/4e409334qwerty.jpg]*Ceket
    rootOfSource = sys.argv[1].split("*")
    #weightOfName = rootOfSource[1]+".pt"
-   weightOfName = "best.pt"
+   weightOfName = "Pantolon.pt"
    path_main_files = rootOfSource[0][1:-1].replace('\\', '').replace('"', '').split(',')
    
    root_dir = path_main_files[0][:49]

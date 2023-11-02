@@ -111,7 +111,7 @@ if lenOfSysArgv > 1:
    # [uploads\/e63ef34244786455f883b4a6e6e211d5720aa58e\/4e409334qwerty.jpg]*Ceket
    rootOfSource = sys.argv[1].split("*")
    #weightOfName = rootOfSource[1]+".pt"
-   weightOfName = "Pantolon.pt"
+   weightOfName = "Tshirt.pt"
    path_main_files = rootOfSource[0][1:-1].replace('\\', '').replace('"', '').split(',')
    
    root_dir = path_main_files[0][:49]

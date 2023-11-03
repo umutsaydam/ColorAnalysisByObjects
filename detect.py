@@ -169,6 +169,10 @@ if lenOfSysArgv > 1:
 
    resultColors.append("*")
    resultColors.append(cls_obj)
+   resultColors.append("*")
+   resultColors.append(root_dir.split('/')[1])
+   resultColors.append("*")
+   resultColors.append(cropped_img_indx)
    print(resultColors)
    #shutil.rmtree("yolov5/runs/predict-seg/exp") 
    #shutil.rmtree(target_file_dir)

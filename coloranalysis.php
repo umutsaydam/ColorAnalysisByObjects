@@ -197,6 +197,8 @@ if (isset($_POST["submit"])) {
                             $analyzes = explode("%", $colorsAndClasses[0]);
                             array_pop($analyzes);
                             $analyzes = array_reverse($analyzes);
+                            $file_dir = trim($colorsAndClasses[2]);
+                            $toNum = $colorsAndClasses[3];
 
                         ?> <div class="row">
                                 <h4 class="text-center mb-4 text-light"><?php echo $subClassName; ?> kategorisine göre renk analizi sonuçları.</h4>
@@ -205,6 +207,7 @@ if (isset($_POST["submit"])) {
                                 <?php
                                 $sum = 0;
                                 $className = null;
+                                $indxOfImg = 0;
                                 for ($i = 0; $i < count($analyzes); $i++) {
                                     $items = explode(" ", str_replace("  ", " ", trim($analyzes[$i])));
                                     if ($i % 3 == 0) {
@@ -221,7 +224,9 @@ if (isset($_POST["submit"])) {
                                         }
                                 ?>
                                         <div class="col d-flex justify-content-center align-items-center result-bg">
+                                        <img src="uploads/<?php echo $file_dir;?>/<?php echo $indxOfImg/3;?>gfg_white.png" class="col-md-2">
                                         <?php }
+                                    
                                     $rateOfAnalysis = $items[3] * 100 / $sum;
                                         ?>
                                         <div class="skill-main col-md-2" style="margin:45px;">
@@ -245,6 +250,7 @@ if (isset($_POST["submit"])) {
                                         ?>
                                         </div>
                                 <?php }
+                                    $indxOfImg++;
                                     }
                                 ?>
                             </div>
@@ -253,8 +259,8 @@ if (isset($_POST["submit"])) {
                                 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
                                 <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_muewqymz.json" background="transparent" speed="1" style="width: 550px; height: 550px;" loop autoplay></lottie-player>
                                 <div class="row">
-                                <h4 class="text-center mb-4 text-light">Maalesef veriler üzerinde istenen kategorideki nesneyi tespit edemedik. </h4>
-                            </div>
+                                    <h4 class="text-center mb-4 text-light">Maalesef veriler üzerinde istenen kategorideki nesneyi tespit edemedik. </h4>
+                                </div>
                             </div>
                         <?php } ?>
                     </div>

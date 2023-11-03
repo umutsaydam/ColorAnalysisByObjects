@@ -26,7 +26,6 @@ def read_image_label(path_to_img: str, path_to_txt: str):
 
     global cls_obj
     obj_cnvrt_obj = []
-
     try:
       with open(path_to_txt, "r") as k:
         for x in k.readlines():
@@ -52,12 +51,12 @@ def cropImg(listCoors : np.ndarray, path_main_file: str, ind : int):
   # -1 loads as-is so if it will be 3 or 4 channel as the original
   # -1 some photos may rotate so it should be 3
   image = cv2.imread(path_main_file, 3)
+
   # mask defaulting to black for 3-channel and transparent for 4-channel
   # (of course replace corners with yours)
   #mask = np.zeros(image.shape, dtype=np.uint8)
   mask = np.zeros(image.shape, dtype=np.uint8)
   roi_corners = np.array([listCoors], dtype=np.int32)
-  
   # fill the ROI so it doesn't get wiped out when the mask is applied
   channel_count = image.shape[2]  # i.e. 3 or 4 depending on your image
   ignore_mask_color = (255,)*channel_count
@@ -103,47 +102,70 @@ def visualize_colors(cluster, centroids):
     return domColors
 
 import shutil
+import convertVideo2Frames
 # MAIN
 lenOfSysArgv = len(sys.argv)
 if lenOfSysArgv > 1:
    # sys.argv param: ["uploads\/97cad3990da070da0b45424e15bdbddaac41b104\/376a25cagfg_white.png","uploads\/97cad3990da070da0b45424e15bdbddaac41b104\/a4e1efedtest2.jpg"]
    
-   # [uploads\/e63ef34244786455f883b4a6e6e211d5720aa58e\/4e409334qwerty.jpg]*Ceket
+   # [uploads\/e63ef34244786455f883b4a6e6e211d5720aa58e\/4e409334qwerty.jpg]*21
    rootOfSource = sys.argv[1].split("*")
    weightOfName = "models/"+rootOfSource[1]+".pt"
    path_main_files = rootOfSource[0][1:-1].replace('\\', '').replace('"', '').split(',')
    
    root_dir = path_main_files[0][:49]
    #path_main_files = ["yolov5/test2.jpg"]
+
+   temp_path_main_files = path_main_files.copy()
+
    for path_main_file in path_main_files:
     file_name = path_main_file.split('/')[2]
-    # file_name = "test2.jpg"
+    if (file_name.split('.')[1] == 'mp4'):
+      temp_path_main_files = temp_path_main_files + convertVideo2Frames.convertVideo2Frames(root_dir, file_name)
+      convertVideo2Frames.deleteSource(root_dir, file_name)
+      temp_path_main_files.remove(path_main_file)
+
+
+   path_main_files.clear()
+   path_main_files = temp_path_main_files.copy()
+
+   for path_main_file in path_main_files:
+    file_name = path_main_file.split('/')[2]
+    #file_name = "test2.jpg"
     status = detect(path_main_file, weightOfName) 
+
     if status == False:
       print("failed")
       sys.exit()
    
    # path_to_text : uploads/97cad3990da070da0b45424e15bdbddaac41b104/376a25cagfg_white.png
-   path_to_img = path_main_files[0]
-   path_to_text = path_main_files[0][:49]+'results/labels/'+file_name.split('.')[0]+".txt"
-   res = read_image_label(path_main_files[0], path_to_text)[1]
-   for q in range(0, len(res)):
-    cropImg(res[q], path_main_files[0], q)
-
    resultColors = []
-   for i in range(0, len(res)):
-    # Load image and convert to a list of pixels
-    path= root_dir+str(i)+"gfg_white.png"
-    #path = "yolov5/runs/predict-seg/exp/gfg_white.png"
-    image = cv2.imread(path)
-    image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    reshape = image.reshape((image.shape[0] * image.shape[1], 3))
-    # Find and display most dominant colors
-    cluster = KMeans(n_clusters=4).fit(reshape)
-    visualize = visualize_colors(cluster, cluster.cluster_centers_)
 
-    resultColors.append(visualize[0:3])
-    #visualize = cv2.cvtColor(visualize, cv2.COLOR_RGB2BGR)
+   cropped_img_indx = 0
+   for path_main_file in path_main_files:
+    file_name = path_main_file.split('/')[2]
+    path_to_img = path_main_file
+    path_to_text = path_main_file[:49]+'results/labels/'+file_name.split('.')[0]+".txt"
+
+    res = read_image_label(path_main_file, path_to_text)[1]
+    for q in range(0, len(res)):
+      cropImg(res[q], path_main_file, cropped_img_indx)
+
+    
+    for i in range(0, len(res)):
+      # Load image and convert to a list of pixels
+      path= root_dir+str(cropped_img_indx)+"gfg_white.png"
+      #path = "yolov5/runs/predict-seg/exp/gfg_white.png"
+      image = cv2.imread(path)
+      image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+      reshape = image.reshape((image.shape[0] * image.shape[1], 3))
+      # Find and display most dominant colors
+      cluster = KMeans(n_clusters=4).fit(reshape)
+      visualize = visualize_colors(cluster, cluster.cluster_centers_)
+
+      resultColors.append(visualize[0:3])
+      #visualize = cv2.cvtColor(visualize, cv2.COLOR_RGB2BGR)
+    cropped_img_indx += 1
 
    resultColors.append("*")
    resultColors.append(cls_obj)

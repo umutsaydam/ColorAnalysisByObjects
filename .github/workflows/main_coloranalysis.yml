@@ -62,5 +62,5 @@ jobs:
         with:
           app-name: 'coloranalysis'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8B70B453B27344B0BE22761B5A109264 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_3FCA51ECF4224095AA5B3917F220E83A }}
           package: .

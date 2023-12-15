@@ -7,6 +7,7 @@ $result = null;
 $mainClass = null;
 $subClassID = null;
 $subClassName = null;
+
 if (isset($_POST["submit"])) {
     if ($_POST["selection"] != "Bir kategori seçiniz." && $_FILES["file"]["tmp_name"][0] != null) {
         if (count($_FILES["file"]["tmp_name"]) <= 3) {
@@ -27,7 +28,7 @@ if (isset($_POST["submit"])) {
                 }
             }
             if ($fileNames != null) {
-                $result = shell_exec("python detect.py " . json_encode($fileNames) . "*" . $subClassID);
+                $result = shell_exec("python detect.py " . json_encode($fileNames));
                 $result = trim($result);
             }
         } else { ?>
@@ -128,6 +129,13 @@ if (isset($_POST["submit"])) {
         z-index: 2;
         visibility: hidden;
     }
+
+    .res-img {
+        object-fit: contain;
+        max-height: 450px;
+        background: rgb(162 164 166 / 22%);
+        border-radius: 15px;
+    }
 </style>
 
 <body>
@@ -187,7 +195,7 @@ if (isset($_POST["submit"])) {
                         <?php
                         if ($result != null && $result != "not found") {
                             $result = trim($result);
-                            echo $result;
+                            echo $result . "<br>";
                             $result = explode("/", $result)[0];
                             $symbols = ["[", "]", "array", "(", ",", ")", "'"];
                             $result = trim(str_replace("      ", " ", str_replace($symbols, "", trim($result))));
@@ -196,65 +204,163 @@ if (isset($_POST["submit"])) {
                             $classes = explode(" ", trim($colorsAndClasses[1]));
                             $analyzes = explode("%", $colorsAndClasses[0]);
                             array_pop($analyzes);
-                            $analyzes = array_reverse($analyzes);
                             $file_dir = trim($colorsAndClasses[2]);
-                            $toNum = $colorsAndClasses[3];
 
-                        ?> <div class="row">
-                                <h4 class="text-center mb-4 text-light"><?php echo $subClassName; ?> kategorisine göre renk analizi sonuçları.</h4>
-                            </div>
-                            <div class="row mt-5 result">
-                                <?php
-                                $sum = 0;
-                                $className = null;
-                                $indxOfImg = 0;
-                                for ($i = 0; $i < count($analyzes); $i++) {
-                                    $items = explode(" ", str_replace("  ", " ", trim($analyzes[$i])));
-                                    if ($i % 3 == 0) {
-                                        $colorOfObject->setColorRgb(($items[0] . "," . $items[1] . "," . $items[2]));
+                            $main_result = array();
+                            $secondary_result = array();
+
+                            function replace($param)
+                            {
+                                $regex = '/\s\s+/';
+                                return str_replace(" ", ", ", trim(preg_replace($regex, ' ', str_replace("\n", " ", $param))));
+                            }
+
+                            for ($i = 0; $i < count($classes); $i++) {
+                                if ($classes[$i] == $subClassID) {
+                                    $main_result[] = array($classes[$i], array($analyzes[$i * 3], $analyzes[$i * 3 + 1], $analyzes[$i * 3 + 2]));
+                                } else {
+                                    $secondary_result[] = array($classes[$i], array($analyzes[$i * 3], $analyzes[$i * 3 + 1], $analyzes[$i * 3 + 2]));
+                                }
+                            }
+                            echo gettype($classes[0]) . " " . gettype($classes[0] . " " . gettype($analyzes[0]));
+                            echo "<br><br>" . json_encode($main_result) . "<br><br>";
+                            echo count($main_result) . "<br>";
+                            echo json_encode($secondary_result) . "<br><br>";
+                            echo count($secondary_result) . "<br>";
+
+                            if (count($main_result) > 0) { ?>
+                                <div class="row">
+                                    <h4 class="text-center mb-2 text-light"><?php echo $subClassName; ?> kategorisine göre renk analizi sonuçları.</h4>
+                                </div>
+                                <div class="mt-5 result">
+                                    <?php
+                                    $indxOfImg = 0;
+
+                                    for ($i = 0; $i < count($main_result); $i++) {
+                                        $items = $main_result[$i];
+                                        $items[1] = array_map("replace", $items[1]);
+                                        $items[1] = array_reverse($items[1]);
+                                        
+                                        $rate = 0.0;
+                                        $red = 0.0;
+                                        $green = 0.0;
+                                        $blue = 0.0;
+                                        for ($j = 0; $j < count($items[1]); $j++) {
+                                            $colorsAndRate = explode(", ", $items[1][$j]);
+                                            $red += doubleval($colorsAndRate[0]);
+                                            $green += doubleval($colorsAndRate[1]);
+                                            $blue += doubleval($colorsAndRate[2]);
+                                            $rate += doubleval($colorsAndRate[3]);
+                                        }
+
+                                        $colorOfObject->setColorRgb(round($red / 3, 2) . ", " . round($green / 3, 2) . ", " . round($blue / 3, 2));
                                         $colorOfObject->setSubClass($subClassID);
                                         $subClass->setsubClassID($subClassID);
                                         $classInfo = $subClass->getsubClassID();
                                         $colorOfObject->createColorValue();
-
-                                        $sum = 0;
-                                        for ($j = $i; $j <= $i + 2; $j++) {
-                                            $rate = doubleval(explode(" ", str_replace("  ", " ", trim($analyzes[$j])))[3]);
-                                            $sum += $rate;
-                                        }
-                                ?>
+                                    ?>
                                         <div class="col d-flex justify-content-center align-items-center result-bg">
-                                        <img src="uploads/<?php echo $file_dir;?>/<?php echo $indxOfImg/3;?>gfg_white.png" class="col-md-2">
-                                        <?php }
-                                    
-                                    $rateOfAnalysis = $items[3] * 100 / $sum;
-                                        ?>
-                                        <div class="skill-main col-md-2" style="margin:45px;">
-                                            <div class="skill-item">
-                                                <h4><?php echo $i + 1; ?>. Renk</h4>
-                                                <div class="progress">
-                                                    <style>
-                                                        .progress<?php echo $i + 1; ?>::-webkit-progress-value {
-                                                            background: rgb(<?php echo $items[0] . ", " . $items[1] . ", " . $items[2]; ?>);
-                                                        }
-                                                    </style>
-                                                    <progress class="progress-bar col-5 <?php echo "progress" . $i + 1; ?>" style="height:100%; width:100%;" id="myProgress" value="<?php echo intval($rateOfAnalysis); ?>" max="100"> <?php echo $items[3]; ?> </progress>
+                                            <img src="uploads/<?php echo $file_dir; ?>/<?php echo $items[0] . "_" . $indxOfImg; ?>_gfg_white.png" class="mt-1 res-img col-md-2">
+                                            <?php
+                                            for ($l = 0; $l < count($items[1]); $l++) {
+                                                $rnd = rand(50, 999);
+                                                $rgbColors = explode(", ", $items[1][$l]);
+                                                $rateOfAnalysis = round((100 * floatval($rgbColors[3])) / $rate, 2);
+                                            ?>
+                                                <div class="skill-main col-md-2" style="margin:45px;">
+                                                    <div class="skill-item">
+                                                        <h4><?php echo $l + 1; ?>. Renk</h4>
+                                                        <div class="progress">
+                                                            <style>
+                                                                .progress<?php echo $i + $rnd; ?>::-webkit-progress-value {
+                                                                    background: rgb(<?php echo $rgbColors[0] . ", " . $rgbColors[1], ", " . $rgbColors[2] ?>);
+                                                                }
+                                                            </style>
+                                                            <progress class="progress-bar col-5 <?php echo "progress" . $i + $rnd; ?>" style="height:100%; width:100%;" id="myProgress" value="<?php echo intval($rateOfAnalysis); ?>" max="100"> <?php echo explode(", ", $items[1][$l])[3]; ?> </progress>
+                                                        </div>
+                                                        <h6 class="text-center mt-1"><?php echo "rgb(" . $rgbColors[0] . ", " . $rgbColors[1], ", " . $rgbColors[2] . ")"; ?></h6>
+                                                        <h6 class="text-center mt-1"><?php echo $rateOfAnalysis . "%";
+                                                                                        ?></h6>
+                                                    </div>
                                                 </div>
-                                                <h6 class="text-center mt-1"><?php echo "rgb(" . $items[0] . "," . $items[1] . ", " . $items[2] . ")"; ?></h6>
-                                                <h6 class="text-center mt-1"><?php echo (strlen(strval($rateOfAnalysis)) > 5 ? substr($rateOfAnalysis, 0, 5) : $rateOfAnalysis) . "%";
-                                                                                ?></h6>
-                                            </div>
+                                            <?php
+                                            }
+                                            ?>
                                         </div>
-                                        <?php
-                                        if ($i != 0 && ($i + 1) % 3 == 0) {
-                                        ?>
-                                        </div>
-                                <?php }
-                                    $indxOfImg++;
+                                    <?php
+                                        $indxOfImg++;
                                     }
-                                ?>
-                            </div>
-                        <?php } else if ($result == "not found") { ?>
+                                    ?>
+                                </div>
+                            <?php    } else { ?>
+
+                            <?php }
+
+                            if (count($secondary_result) > 0) { ?>
+                                <div class="row">
+                                    <h4 class="text-center mb-2 mt-5 text-light"> Seçtiğiniz kategoriden farklı olarak bunlar da tespit edildi.</h4>
+                                </div>
+                                <div class="mt-5 result">
+                                    <?php
+                                    $indxOfImg = 0;
+
+                                    for ($i = 0; $i < count($secondary_result); $i++) {
+                                        $items = $secondary_result[$i];
+                                        $items[1] = array_map("replace", $items[1]);
+                                        $items[1] = array_reverse($items[1]);
+                                        $rate = 0.0;
+                                        $red = 0.0;
+                                        $green = 0.0;
+                                        $blue = 0.0;
+                                        for ($j = 0; $j < count($items[1]); $j++) {
+                                            $colorsAndRate = explode(", ", $items[1][$j]);
+                                            $red += doubleval($colorsAndRate[0]);
+                                            $green += doubleval($colorsAndRate[1]);
+                                            $blue += doubleval($colorsAndRate[2]);
+                                            $rate += doubleval($colorsAndRate[3]);
+                                        }
+
+                                        $colorOfObject->setColorRgb(round($red / 3, 2) . ", " . round($green / 3, 2) . ", " . round($blue / 3, 2));
+                                        $colorOfObject->setSubClass($subClassID);
+                                        $subClass->setsubClassID($subClassID);
+                                        $classInfo = $subClass->getsubClassID();
+                                        $colorOfObject->createColorValue();
+                                    ?>
+                                        <div class="col d-flex justify-content-center align-items-center result-bg">
+                                            <img src="uploads/<?php echo $file_dir; ?>/<?php echo $items[0] . "_0"; ?>_gfg_white.png" class="mt-1 res-img col-md-2">
+                                            <?php
+                                            for ($l = 0; $l < count($items[1]); $l++) {
+                                                $rnd = rand(50, 999);
+                                                $rgbColors = explode(", ", $items[1][$l]);
+                                                $rateOfAnalysis = round((100 * floatval($rgbColors[3])) / $rate, 2);
+                                            ?>
+                                                <div class="skill-main col-md-2" style="margin:45px;">
+                                                    <div class="skill-item">
+                                                        <h4><?php echo $l + 1; ?>. Renk</h4>
+                                                        <div class="progress">
+                                                            <style>
+                                                                .progress<?php echo $i + $rnd; ?>::-webkit-progress-value {
+                                                                    background: rgb(<?php echo $rgbColors[0] . ", " . $rgbColors[1], ", " . $rgbColors[2] ?>);
+                                                                }
+                                                            </style>
+                                                            <progress class="progress-bar col-5 <?php echo "progress" . $i + $rnd; ?>" style="height:100%; width:100%;" id="myProgress" value="<?php echo intval($rateOfAnalysis); ?>" max="100"> <?php echo explode(", ", $items[1][$l])[3]; ?> </progress>
+                                                        </div>
+                                                        <h6 class="text-center mt-1"><?php echo "rgb(" . $rgbColors[0] . ", " . $rgbColors[1], ", " . $rgbColors[2] . ")"; ?></h6>
+                                                        <h6 class="text-center mt-1"><?php echo $rateOfAnalysis . "%";
+                                                                                        ?></h6>
+                                                    </div>
+                                                </div>
+                                            <?php
+                                            }
+                                            ?>
+                                        </div>
+                                    <?php
+                                        $indxOfImg++;
+                                    }
+                                    ?>
+                                </div>
+                            <?php }
+                        } else if ($result == "not found") { ?>
                             <div class="row justify-content-center align-items-center mt-2 mb-5">
                                 <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
                                 <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_muewqymz.json" background="transparent" speed="1" style="width: 550px; height: 550px;" loop autoplay></lottie-player>

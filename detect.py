@@ -7,9 +7,9 @@ root_dir= ''
 target_file_dir = ''
 file_name = ''
 cls_obj = []
-def detect(path_main_file, weightOfName):
+def detect(path_main_file):
   global target_file_dir
-  runPredict = "python yolov5/segment/predict.py --weights "+weightOfName+" --img 640 --conf 0.25 --source "+ path_main_file +" --save-txt"
+  runPredict = "python yolov5/segment/predict.py --weights models/best.pt --img 640 --conf 0.25 --source "+ path_main_file +" --save-txt"
   result = os.system(runPredict)
   if result == 0:
     return True
@@ -46,12 +46,11 @@ def read_image_label(path_to_img: str, path_to_txt: str):
     return image, obj_cnvrt_obj
 
 from sklearn.cluster import KMeans
-def cropImg(listCoors : np.ndarray, path_main_file: str, ind : int):
+def cropImg(listCoors : np.ndarray, path_main_file: str, ind : int, clss_num: int):
   # original image
   # -1 loads as-is so if it will be 3 or 4 channel as the original
   # -1 some photos may rotate so it should be 3
   image = cv2.imread(path_main_file, 3)
-
   # mask defaulting to black for 3-channel and transparent for 4-channel
   # (of course replace corners with yours)
   #mask = np.zeros(image.shape, dtype=np.uint8)
@@ -73,7 +72,7 @@ def cropImg(listCoors : np.ndarray, path_main_file: str, ind : int):
   # Applying thresholding technique
   dst = cv2.merge(rgba, 4)
   # Writing and saving to a new image
-  cv2.imwrite(root_dir+str(ind)+"gfg_white.png", dst)
+  cv2.imwrite(root_dir+clss_num+"_"+str(ind)+"_gfg_white.png", dst)
   return dst
 # END cropImg
 
@@ -108,13 +107,15 @@ lenOfSysArgv = len(sys.argv)
 if lenOfSysArgv > 1:
    # sys.argv param: ["uploads\/97cad3990da070da0b45424e15bdbddaac41b104\/376a25cagfg_white.png","uploads\/97cad3990da070da0b45424e15bdbddaac41b104\/a4e1efedtest2.jpg"]
    
-   # [uploads\/e63ef34244786455f883b4a6e6e211d5720aa58e\/4e409334qwerty.jpg]*21
-   rootOfSource = sys.argv[1].split("*")
-   weightOfName = "models/"+rootOfSource[1]+".pt"
-   path_main_files = rootOfSource[0][1:-1].replace('\\', '').replace('"', '').split(',')
-   
+   # [uploads\/d6b62784a13dbcb3079d391702201a7450d1bb30\/b3ea36f6tisort.jpg]
+   rootOfSource = sys.argv[1]
+
+   path_main_files = rootOfSource[1:-1].replace('\\', '').replace('"', '').split(',')
+   # for an item of path_main_files
+   # uploads/d1aed630cd0b72b0c3cee98f8c66b322ffd7c8f2/69c43ba5tisort.jpg
+
    root_dir = path_main_files[0][:49]
-   #path_main_files = ["yolov5/test2.jpg"]
+   # uploads/d9dcbafd450fe9cbd0c88edcc2424db04c7e66e0/
 
    temp_path_main_files = path_main_files.copy()
 
@@ -132,7 +133,7 @@ if lenOfSysArgv > 1:
    for path_main_file in path_main_files:
     file_name = path_main_file.split('/')[2]
     #file_name = "test2.jpg"
-    status = detect(path_main_file, weightOfName) 
+    status = detect(path_main_file) 
 
     if status == False:
       print("failed")
@@ -140,7 +141,6 @@ if lenOfSysArgv > 1:
    
    # path_to_text : uploads/97cad3990da070da0b45424e15bdbddaac41b104/376a25cagfg_white.png
    resultColors = []
-
    cropped_img_indx = 0
    for path_main_file in path_main_files:
     file_name = path_main_file.split('/')[2]
@@ -148,13 +148,25 @@ if lenOfSysArgv > 1:
     path_to_text = path_main_file[:49]+'results/labels/'+file_name.split('.')[0]+".txt"
 
     res = read_image_label(path_main_file, path_to_text)[1]
-    for q in range(0, len(res)):
-      cropImg(res[q], path_main_file, cropped_img_indx)
+    temp_cls_obj = -1
 
-    
-    for i in range(0, len(res)):
+    for q in range(0, len(res)):
+     if q != 0 and cls_obj[q] != temp_cls_obj:
+       cropped_img_indx = 0
+     temp_cls_obj = cls_obj[q]
+     cropImg(res[q], path_main_file, cropped_img_indx, cls_obj[q])
+     cropped_img_indx += 1
+   
+   temp_cls_obj = -1
+   cnt = 0
+   for i in range(0, len(res)):
+      with open("test.txt", "w") as k:
+        k.write(str(cls_obj[i])+" ")
+      if i != 0 and cls_obj[i] != temp_cls_obj:
+       cnt = 0
       # Load image and convert to a list of pixels
-      path= root_dir+str(cropped_img_indx)+"gfg_white.png"
+      temp_cls_obj = cls_obj[i]
+      path= root_dir+cls_obj[i]+"_"+str(cnt)+"_gfg_white.png"
       #path = "yolov5/runs/predict-seg/exp/gfg_white.png"
       image = cv2.imread(path)
       image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
@@ -165,7 +177,8 @@ if lenOfSysArgv > 1:
 
       resultColors.append(visualize[0:3])
       #visualize = cv2.cvtColor(visualize, cv2.COLOR_RGB2BGR)
-    cropped_img_indx += 1
+      cnt += 1
+    
 
    resultColors.append("*")
    resultColors.append(cls_obj)

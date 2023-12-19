@@ -308,6 +308,7 @@ if (isset($_POST["submit"])) {
 
                                     for ($i = 0; $i < count($secondary_result); $i++) {
                                         $items = $secondary_result[$i];
+                                        $items[0] = intval($items[0]);
                                         $items[1] = array_map("replace", $items[1]);
                                         $items[1] = array_reverse($items[1]);
                                         $rate = 0.0;
@@ -323,8 +324,8 @@ if (isset($_POST["submit"])) {
                                         }
 
                                         $colorOfObject->setColorRgb(round($red / 3, 2) . ", " . round($green / 3, 2) . ", " . round($blue / 3, 2));
-                                        $colorOfObject->setSubClass($subClassID);
-                                        $subClass->setsubClassID($subClassID);
+                                        $colorOfObject->setSubClass($items[0]);
+                                        $subClass->setsubClassID($items[0]);
                                         $classInfo = $subClass->getsubClassID();
                                         $colorOfObject->createColorValue();
                                     ?>

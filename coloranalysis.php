@@ -141,8 +141,8 @@ if (isset($_POST["submit"])) {
 <body>
     <div class="custom-spinner" id="spinner">
         <div class="text-center">
-            <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-            <lottie-player src="https://assets8.lottiefiles.com/packages/lf20_amkX7EsOUD.json" background="transparent" speed="1" style="width: 450px; height: 450px;" loop autoplay></lottie-player>
+            <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+            <dotlottie-player src="https://lottie.host/697296c5-375d-4e78-b052-39125773ee60/sKruhEtHVd.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></dotlottie-player>
             <h5 class="text-center text-light">Analiz ediliyor...</h5>
         </div>
     </div>
@@ -240,7 +240,7 @@ if (isset($_POST["submit"])) {
                                         $items = $main_result[$i];
                                         $items[1] = array_map("replace", $items[1]);
                                         $items[1] = array_reverse($items[1]);
-                                        
+
                                         $rate = 0.0;
                                         $red = 0.0;
                                         $green = 0.0;
@@ -293,12 +293,14 @@ if (isset($_POST["submit"])) {
                                     ?>
                                 </div>
                             <?php    } else { ?>
-
+                                <div class="row">
+                                    <h4 class="text-center mb-2 mt-5 text-light"> Seçtiğiniz kategoride herhangi bir nesne tespit edilemedi.</h4>
+                                </div>
                             <?php }
 
                             if (count($secondary_result) > 0) { ?>
                                 <div class="row">
-                                    <h4 class="text-center mb-2 mt-5 text-light"> Seçtiğiniz kategoriden farklı olarak bunlar da tespit edildi.</h4>
+                                    <h4 class="text-center mb-2 mt-5 text-light"> Seçtiğiniz kategoriden farklı olarak bunlar tespit edildi.</h4>
                                 </div>
                                 <div class="mt-5 result">
                                     <?php
@@ -362,8 +364,8 @@ if (isset($_POST["submit"])) {
                             <?php }
                         } else if ($result == "not found") { ?>
                             <div class="row justify-content-center align-items-center mt-2 mb-5">
-                                <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-                                <lottie-player src="https://assets1.lottiefiles.com/packages/lf20_muewqymz.json" background="transparent" speed="1" style="width: 550px; height: 550px;" loop autoplay></lottie-player>
+                                <script src="https://unpkg.com/@dotlottie/player-component@latest/dist/dotlottie-player.mjs" type="module"></script>
+                                <dotlottie-player src="https://lottie.host/bed5c7fe-60b6-47f1-840a-3a73a7cf3708/BnHMGGWshW.json" background="transparent" speed="1" style="width: 300px; height: 300px;" loop autoplay></dotlottie-player>
                                 <div class="row">
                                     <h4 class="text-center mb-4 text-light">Maalesef veriler üzerinde istenen kategorideki nesneyi tespit edemedik. </h4>
                                 </div>

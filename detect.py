@@ -146,22 +146,21 @@ if lenOfSysArgv > 1:
     file_name = path_main_file.split('/')[2]
     path_to_img = path_main_file
     path_to_text = path_main_file[:49]+'results/labels/'+file_name.split('.')[0]+".txt"
+    
+    if os.path.isfile(path_to_text):
+      res = read_image_label(path_main_file, path_to_text)[1]
+      temp_cls_obj = -1
+      for q in range(0, len(res)):
+        if q != 0 and cls_obj[q] != temp_cls_obj:
+          cropped_img_indx = 0
+        temp_cls_obj = cls_obj[q]
+        cropImg(res[q], path_main_file, cropped_img_indx, cls_obj[q])
+        cropped_img_indx += 1
 
-    res = read_image_label(path_main_file, path_to_text)[1]
-    temp_cls_obj = -1
-
-    for q in range(0, len(res)):
-     if q != 0 and cls_obj[q] != temp_cls_obj:
-       cropped_img_indx = 0
-     temp_cls_obj = cls_obj[q]
-     cropImg(res[q], path_main_file, cropped_img_indx, cls_obj[q])
-     cropped_img_indx += 1
-   
+    
    temp_cls_obj = -1
    cnt = 0
-   for i in range(0, len(res)):
-      with open("test.txt", "w") as k:
-        k.write(str(cls_obj[i])+" ")
+   for i in range(0, len(cls_obj)):
       if i != 0 and cls_obj[i] != temp_cls_obj:
        cnt = 0
       # Load image and convert to a list of pixels

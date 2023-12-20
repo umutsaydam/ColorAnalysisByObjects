@@ -96,7 +96,7 @@ function calculateAverageColor($colors)
     }
 
     .color-box {
-        min-height: 1em;
+        min-height: 3em;
         vertical-align: middle;
         color: #3e3e3e;
         float: right;
@@ -118,6 +118,24 @@ function calculateAverageColor($colors)
     .count-of-data {
         font-size: 0.9rem;
         opacity: 0.7;
+    }
+
+    span.rgb-color-code {
+        border-color: rgba(222, 226, 230, 0.22);
+        padding: 5px;
+        border-radius: 15px;
+        float: right;
+        color: #fffc;
+    }
+
+    path.highcharts-point.highcharts-color-0.highcharts-node {
+        stroke: white;
+        stroke-width: 0.3px;
+    }
+
+    path.highcharts-point.highcharts-color-0.highcharts-node:hover {
+        stroke: white;
+        stroke-width: 1px;
     }
 </style>
 
@@ -199,7 +217,8 @@ function calculateAverageColor($colors)
                 marker: {
                   radius: 60,
                 },
-                color: 'rgb(" . $statisticOfColorByMainClass[$classItemKey] . ")',
+                
+                color: 'rgb(" . $statisticOfColorByMainClass[$classItemKey] . ")',                
               },";
             foreach ($classItemValue as $key => $value) {
                 $nodes .=  "{
@@ -252,11 +271,11 @@ function calculateAverageColor($colors)
                     },
                     dataLabels: {
                         style: {
-                            color: '#3e3e3e',
+                            color: '#fffc',
                             fontWeight: 'bold',
                             fontSize: '15px',
                             fontFamily: 'Trebuchet MS, Verdana, sans-serif'
-                        }
+                        },
                     }
                 },
             },
@@ -267,6 +286,9 @@ function calculateAverageColor($colors)
                 dataLabels: {
                     enabled: true,
                     linkFormat: '',
+                    borderRadius: 10,
+                    borderWidth: 1,
+                    backgroundColor: 'rgba(222, 226, 230, 0.22)',
                     allowOverlap: true,
                     style: {
                         textOutline: false
@@ -329,7 +351,11 @@ function calculateAverageColor($colors)
                                     <p class="statistic-title"><?php echo $key; ?></p>
                                     <?php
                                     foreach ($value as $k => $val) { ?>
-                                        <footer class="blockquote-footer mt-2 statistic-sub-class"><b><?php echo $k; ?></b> <cite title="Source Title"></cite><span class="color-box col-10" style="background-color: rgb(<?php echo $val; ?>)">rgb(<?php echo $val; ?>)</span>
+                                        <footer class="blockquote-footer mt-2 statistic-sub-class"><b><?php echo $k; ?></b>
+                                            <cite title="Source Title"></cite>
+                                            <span class="color-box col-10" style="background-color: rgb(<?php echo $val; ?>)">
+                                                <span class="rgb-color-code">rgb(<?php echo $val; ?>)</span>
+                                            </span>
                                             <p class="count-of-data"><?php echo "(" . $statisticOfColorByCount[$key][$k] . " adet veri ile hesaplanmıştır.)"; ?></p>
                                         </footer>
                                 <?php }

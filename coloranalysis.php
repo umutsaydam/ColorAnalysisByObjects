@@ -195,7 +195,6 @@ if (isset($_POST["submit"])) {
                         <?php
                         if ($result != null && $result != "not found") {
                             $result = trim($result);
-                            echo $result . "<br>";
                             $result = explode("/", $result)[0];
                             $symbols = ["[", "]", "array", "(", ",", ")", "'"];
                             $result = trim(str_replace("      ", " ", str_replace($symbols, "", trim($result))));
@@ -223,11 +222,6 @@ if (isset($_POST["submit"])) {
                                         $secondary_result[] = array($classes[$i], array($analyzes[$i * 3], $analyzes[$i * 3 + 1], $analyzes[$i * 3 + 2]));
                                     }
                                 }
-                                echo gettype($classes[0]) . " " . gettype($classes[0] . " " . gettype($analyzes[0]));
-                                echo "<br><br>" . json_encode($main_result) . "<br><br>";
-                                echo count($main_result) . "<br>";
-                                echo json_encode($secondary_result) . "<br><br>";
-                                echo count($secondary_result) . "<br>";
 
                                 if (count($main_result) > 0) { ?>
                                     <div class="row">
